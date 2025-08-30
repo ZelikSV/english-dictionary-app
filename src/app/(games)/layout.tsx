@@ -1,5 +1,5 @@
-import NoEmptyWordsPage from "@/ui/NoWordsSelected";
+import NoEmptyWordsPage from '@/ui/NoWordsSelected';
 
-export default function GamesLayout() {
-  return <NoEmptyWordsPage />;
-}
+const GamesLayout = () => <NoEmptyWordsPage />;
+
+export default GamesLayout;

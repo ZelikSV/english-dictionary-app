@@ -1,2 +1,2 @@
-export { useWordsStore } from './useWordsStore'
-export { useWordsGroupStore } from './useWordsGroupsStore'
+export {useWordsStore} from './useWordsStore';
+export {useWordsGroupStore} from './useWordsGroupsStore';

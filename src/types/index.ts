@@ -1,3 +1,7 @@
+import React from 'react';
+
+type HeroIcon = React.ComponentType<React.ComponentProps<'svg'>>;
+
 export interface IWord {
     en: string;
     ua: string;
@@ -19,7 +23,7 @@ export interface IDBWord {
 export interface Activity {
     title: string
     description: string
-    icon: any
+    icon: HeroIcon
     color: string
     link: string
 }
