@@ -2,8 +2,11 @@
 
 import Link from 'next/link';
 import {clsx} from 'clsx';
+import {signOut, useSession} from "next-auth/react";
 
 export const Header = () => {
+    const { data: session } = useSession();
+
     return (
         <div className='bg-gradient-to-r from-gray-50 to-gray-100 shadow-sm border-b border-gray-200/30'>
             <div className='max-w-7xl mx-auto px-6 sm:px-8 lg:px-12'>
@@ -36,7 +39,10 @@ export const Header = () => {
                             <div className='w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-500 rounded-lg flex items-center justify-center'>
                                 <span className='text-white font-medium text-sm'>U</span>
                             </div>
-                            <button className='text-gray-600 hover:text-red-500 text-sm font-medium transition-colors cursor-pointer duration-200'>
+                            <button
+                                onClick={() => signOut({ redirectTo: '/login' })}
+                                className="text-gray-600 hover:text-red-500 text-sm font-medium transition-colors cursor-pointer duration-200"
+                            >
                                 Logout
                             </button>
                         </div>
