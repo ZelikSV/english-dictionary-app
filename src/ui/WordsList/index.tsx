@@ -41,7 +41,7 @@ const WordsList = ({words, onDeleteWord, onUpdateWord}: WordsListProps) => {
 
     return (
         <div>
-            <h3 className='text-lg font-medium text-black-700 mb-3'>
+            <h3 className='text-lg font-medium text-gray-700 mb-3'>
                 Додані слова ({words.length})
             </h3>
             <div className='max-h-64 overflow-y-auto border border-gray-200 rounded-lg'>
@@ -53,23 +53,23 @@ const WordsList = ({words, onDeleteWord, onUpdateWord}: WordsListProps) => {
                                     type='text'
                                     value={editingWord.en}
                                     onChange={e => setEditingWord({...editingWord, en: e.target.value})}
-                                    className='flex-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500'
+                                    className='flex-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black'
                                 />
                                 <input
                                     type='text'
                                     value={editingWord.ua}
                                     onChange={e => setEditingWord({...editingWord, ua: e.target.value})}
-                                    className='flex-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500'
+                                    className='flex-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black'
                                 />
                                 <button
                                     onClick={saveEdit}
-                                    className='px-3 py-1 bg-green-500 text-black rounded text-sm hover:bg-green-600'
+                                    className='px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600'
                                 >
                                     ✓
                                 </button>
                                 <button
                                     onClick={cancelEdit}
-                                    className='px-3 py-1 bg-gray-500 text-black rounded text-sm hover:bg-gray-600'
+                                    className='px-3 py-1 bg-gray-500 text-white rounded text-sm hover:bg-gray-600'
                                 >
                                     ✕
                                 </button>
@@ -77,9 +77,9 @@ const WordsList = ({words, onDeleteWord, onUpdateWord}: WordsListProps) => {
                         ) : (
                             <div className='flex items-center justify-between w-full'>
                                 <div className='flex-1'>
-                                    <span className='font-medium text-black-800'>{word.en}</span>
-                                    <span className='text-black-500 mx-2'>-</span>
-                                    <span className='text-black-700'>{word.ua}</span>
+                                    <span className='font-medium text-gray-800'>{word.en}</span>
+                                    <span className='text-gray-500 mx-2'>-</span>
+                                    <span className='text-gray-700'>{word.ua}</span>
                                 </div>
                                 <div className='flex gap-2'>
                                     <button
