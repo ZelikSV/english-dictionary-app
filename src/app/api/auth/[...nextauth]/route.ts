@@ -16,7 +16,7 @@ export const config: NextAuthConfig = {
 
             return token;
         },
-        async session({session, _}) {
+        async session({session}) {
             return session;
         }
     }
