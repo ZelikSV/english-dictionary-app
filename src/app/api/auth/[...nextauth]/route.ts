@@ -1,0 +1,31 @@
+import NextAuth, {type NextAuthConfig} from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+
+export const config: NextAuthConfig = {
+    providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+        })
+    ],
+    callbacks: {
+        async jwt({token, account}) {
+            if (account) {
+                token.accessToken = account.access_token;
+            }
+
+            return token;
+        },
+        async session({session, _}) {
+            return session;
+        }
+    }
+};
+
+const handler = NextAuth(config);
+
+export {handler as GET, handler as POST, config as authOptions};
+
+export const auth = () => {
+    return handler;
+};
