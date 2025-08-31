@@ -1,8 +1,7 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import {NextResponse, type NextRequest} from 'next/server';
 
 export const middleware = (request: NextRequest) => {
-    const { pathname } = request.nextUrl;
+    const {pathname} = request.nextUrl;
 
     const publicPaths = ['/login'];
     const isPublicPath = publicPaths.some(path => pathname.startsWith(path));
@@ -23,6 +22,6 @@ export const middleware = (request: NextRequest) => {
 
 export const config = {
     matcher: [
-        '/((?!api|_next/static|_next/image|favicon.ico).*)',
+        '/((?!api|_next/static|_next/image|favicon.ico).*)'
     ]
 };
