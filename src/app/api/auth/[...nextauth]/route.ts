@@ -1,4 +1,4 @@
-import NextAuth, { type NextAuthConfig } from 'next-auth';
+import NextAuth, {type NextAuthConfig} from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 export const config: NextAuthConfig = {
@@ -6,8 +6,8 @@ export const config: NextAuthConfig = {
         CredentialsProvider({
             name: 'credentials',
             credentials: {
-                email: { label: 'Email', type: 'email' },
-                password: { label: 'Password', type: 'password' }
+                email: {label: 'Email', type: 'email'},
+                password: {label: 'Password', type: 'password'}
             },
             async authorize(credentials) {
                 if (credentials?.email === 'user@example.com' && credentials?.password === 'password') {
@@ -17,21 +17,20 @@ export const config: NextAuthConfig = {
                         name: 'User'
                     };
                 }
+
                 return null;
             }
         })
     ],
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({token, user}) {
             if (user) {
                 token.userId = user.id;
             }
+
             return token;
         },
-        async session({ session, token }) {
-            // @ts-ignore
-            session.user.id = token.userId;
-
+        async session({session}) {
             return session;
         }
     }
@@ -39,4 +38,4 @@ export const config: NextAuthConfig = {
 
 const handler = NextAuth(config);
 
-export { handler as GET, handler as POST };
+export {handler as GET, handler as POST};
