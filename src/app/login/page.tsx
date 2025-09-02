@@ -1,7 +1,7 @@
 import LoginForm from '@/ui/LoginForm';
 import RegisterForm from '@/ui/RegisterForm';
 import Tabs from '@/ui/Tabs';
-import {checkDbConnection} from "@/lib/db";
+import {checkDbConnection} from '@/lib/db';
 
 const LoginPage = async () => {
     await checkDbConnection();
