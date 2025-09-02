@@ -24,7 +24,7 @@ export const config: NextAuthConfig = {
 
 const handler = NextAuth(config);
 
-export {handler as GET, handler as POST, config as authOptions};
+export {handler as POST};
 
 export const auth = () => {
     return handler;
