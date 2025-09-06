@@ -1,16 +1,87 @@
-import {auth} from '@/app/api/auth/[...nextauth]/route';
+import {NextAuthOptions} from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import {sql} from '@/lib/db';
+import bcrypt from 'bcrypt';
 
-export const getCurrentUser = async () => {
-    const session = await auth();
+export const authOptions: NextAuthOptions = {
+    providers: [
+        CredentialsProvider({
+            name: 'credentials',
+            credentials: {
+                email: {label: 'Email', type: 'email'},
+                password: {label: 'Password', type: 'password'}
+            },
+            async authorize(credentials) {
+                if (!credentials?.email || !credentials?.password) {
+                    return null;
+                }
 
-    return session;
-};
+                try {
+                    const users = await sql`SELECT * FROM users WHERE email = ${credentials.email}`;
 
-export const requireAuth = async ()=> {
-    const session = await auth();
-    if (!session) {
-        throw new Error('Authentication required');
-    }
+                    if (users.length === 0) {
+                        return null;
+                    }
 
-    return session;
+                    const user = users[0];
+
+                    const isValid = await bcrypt.compare(credentials.password, user.password);
+
+                    if (!isValid) {
+                        return null;
+                    }
+
+                    return {
+                        id: user.id,
+                        email: user.email,
+                        name: user.username
+                    };
+                } catch (error) {
+                    /* eslint-disable-next-line no-console */
+                    console.error('Auth error:', error);
+
+                    return null;
+                }
+            }
+        })
+    ],
+    callbacks: {
+        async jwt({token, user}) {
+            if (user) {
+                token.id = user.id;
+                token.email = user.email;
+                token.name = user.name;
+            }
+
+            return token;
+        },
+        async session({session, token}) {
+            if (token && session.user) {
+                // @ts-expect-error ignore this for now
+                session.user.id = token.id as string;
+                session.user.email = token.email as string;
+                session.user.name = token.name as string;
+            }
+
+            return session;
+        },
+        async redirect({url, baseUrl}) {
+            if (url.startsWith('/')) {
+                return `${baseUrl}${url}`;
+            }
+
+            if (new URL(url).origin === baseUrl) {
+                return url;
+            }
+
+            return baseUrl;
+        }
+    },
+    session: {
+        strategy: 'jwt'
+    },
+    pages: {
+        signIn: '/login'
+    },
+    secret: process.env.NEXTAUTH_SECRET
 };

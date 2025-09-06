@@ -2,6 +2,8 @@
 import React, {useState} from 'react';
 import Link from 'next/link';
 import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
+import {signIn} from 'next-auth/react';
+import {useRouter} from 'next/navigation';
 
 interface LoginFormData {
     email: string;
@@ -9,11 +11,12 @@ interface LoginFormData {
 }
 
 const LoginForm = () => {
+    const router = useRouter();
     const [formData, setFormData] = useState<LoginFormData>({
         email: '',
         password: ''
     });
-    const isLoading = false;
+    const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState<Partial<LoginFormData>>({});
 
@@ -39,8 +42,24 @@ const LoginForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
         if (validateForm()) {
+            setIsLoading(true);
+
+        const result =  await signIn('credentials', {
+                email: formData.email,
+                password: formData.password,
+                redirect: false
+            });
+
+            if (result?.ok) {
+                setIsLoading(false);
+
+                router.push('/');
+            }
         }
+
+        setIsLoading(false);
     };
 
     const handleChange = (field: keyof LoginFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {

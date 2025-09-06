@@ -38,3 +38,8 @@ export interface IWordGroupItem {
     ua: string;
     id: string;
 }
+
+export interface IUserCredentials {
+    email: { label: string, type: string },
+    password: { label: string, type: string }
+}
