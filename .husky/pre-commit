@@ -1,0 +1,10 @@
+# .husky/pre-commit
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Запуск lint-staged для автофіксу та форматування
+npx lint-staged
+
+echo "✅ Pre-commit checks passed!"

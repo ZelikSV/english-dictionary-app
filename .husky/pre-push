@@ -1,0 +1,40 @@
+
+# .husky/pre-push
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Running pre-push checks..."
+
+# Перевірка TypeScript
+echo "📝 Type checking..."
+npm run type-check
+if [ $? -ne 0 ]; then
+  echo "❌ TypeScript errors found. Push aborted."
+  exit 1
+fi
+
+# Запуск лінтера
+echo "🔍 Linting..."
+npm run lint
+if [ $? -ne 0 ]; then
+  echo "❌ Linting errors found. Push aborted."
+  exit 1
+fi
+
+# Тестування білду
+echo "🏗️ Testing build..."
+npm run build
+if [ $? -ne 0 ]; then
+  echo "❌ Build failed. Push aborted."
+  exit 1
+fi
+
+# Якщо є тести - запустити їх
+echo "🧪 Running tests..."
+npm run test
+if [ $? -ne 0 ]; then
+  echo "❌ Tests failed. Push aborted."
+  exit 1
+fi
+
+echo "✅ All pre-push checks passed!"
