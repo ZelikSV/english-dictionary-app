@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import {useRouter} from 'next/navigation';
 
 interface RegisterFormData {
     name: string;
@@ -10,6 +11,8 @@ interface RegisterFormData {
 }
 
 const RegisterForm = () => {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState<RegisterFormData>({
         name: '',
         email: '',
@@ -17,7 +20,6 @@ const RegisterForm = () => {
     });
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState<Partial<RegisterFormData>>({});
-    const isLoading = false;
 
     const validateForm = () => {
         const newErrors: Partial<RegisterFormData> = {};
@@ -48,6 +50,8 @@ const RegisterForm = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (validateForm()) {
+            setIsLoading(true);
+
             const response = await fetch('/api/register', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -55,6 +59,9 @@ const RegisterForm = () => {
             });
 
            await response.json();
+
+            setIsLoading(false);
+            router.push('/login');
         }
     };
 

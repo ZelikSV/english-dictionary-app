@@ -3,7 +3,7 @@ import {NextResponse, NextRequest} from 'next/server';
 export const middleware = (request: NextRequest) => {
     const {pathname} = request.nextUrl;
 
-    const publicPaths = ['/login'];
+    const publicPaths = ['/login', '/register'];
     const isPublicPath = publicPaths.some(path => pathname.startsWith(path));
 
     const token = request.cookies.get('next-auth.session-token')?.value ||

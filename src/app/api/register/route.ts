@@ -1,6 +1,8 @@
 import {NextResponse} from 'next/server';
 import bcrypt from 'bcrypt';
+
 import {sql} from '@/lib/db';
+import {log} from '@/lib/logger';
 
 export const POST = async (req: Request) => {
     try {
@@ -26,8 +28,7 @@ export const POST = async (req: Request) => {
 
         return NextResponse.json({user});
     } catch (e) {
-        /* eslint-disable-next-line no-console */
-        console.error(e);
+        log.error('Internal server error:', e);
 
         return NextResponse.json({error: 'Internal server error'}, {status: 500});
     }

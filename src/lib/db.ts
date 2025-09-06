@@ -1,5 +1,7 @@
 import postgres from 'postgres';
 
+import {log} from '@/lib/logger';
+
 export const sql = postgres(process.env.POSTGRES_URL!, {ssl: 'require'});
 
 const createUsersTable = async () => {
@@ -13,8 +15,7 @@ const createUsersTable = async () => {
         `;
 
         if (tableExists[0].table_exists) {
-            /* eslint-disable-next-line no-console */
-            console.log('Table "users" already exists. Everything is OK.');
+            log.info('Table "users" already exists. Everything is OK.');
 
             return;
         }
@@ -30,8 +31,7 @@ const createUsersTable = async () => {
             );
         `;
     } catch (err) {
-        /* eslint-disable-next-line no-console */
-        console.error('Error creating table:', err);
+        log.error('Error creating table:', err);
     }
 };
 
@@ -40,13 +40,11 @@ export const checkDbConnection = async () => {
         const res = await sql`SELECT 1 as ok`;
 
         await createUsersTable();
-        /* eslint-disable-next-line no-console */
-        console.log('DB connection was success:', res);
+        log.info('DB connection was success:', res);
 
         return res[0].ok === 1;
     } catch (err) {
-        /* eslint-disable-next-line no-console */
-        console.error('DB connection failed:', err);
+        log.error('DB connection failed:', err);
 
         return false;
     }

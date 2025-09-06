@@ -4,6 +4,7 @@ import Link from 'next/link';
 import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
 import {signIn} from 'next-auth/react';
 import {useRouter} from 'next/navigation';
+import Spinner from '@/ui/Spinner';
 
 interface LoginFormData {
     email: string;
@@ -133,14 +134,20 @@ const LoginForm = () => {
                             disabled={isLoading}
                             className='w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-3 rounded-xl font-medium hover:from-green-500 hover:to-green-600 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed'
                         >
-                            {isLoading ? 'Вхід...' : 'Увійти'}
+                            {isLoading && (
+                                     <span className='inline-block mr-[10px]'>
+                                        <Spinner size='sm' color='white' />
+                                     </span>)}
+                            <span className='text-white'>
+                                 {isLoading ? 'Вхід...' : 'Увійти'}
+                            </span>
                         </button>
                     </div>
 
                     <div className='text-center mt-6'>
                         <p className='text-gray-600'>
                             Немає облікового запису?{' '}
-                            <Link href='/login' className='text-green-600 hover:text-green-700 font-medium'>
+                            <Link href='/register' className='text-green-600 hover:text-green-700 font-medium'>
                                 Зареєструватися
                             </Link>
                         </p>

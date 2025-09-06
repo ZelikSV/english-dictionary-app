@@ -1,7 +1,9 @@
 import {NextAuthOptions} from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import {sql} from '@/lib/db';
 import bcrypt from 'bcrypt';
+
+import {sql} from '@/lib/db';
+import {log} from '@/lib/logger';
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -37,8 +39,7 @@ export const authOptions: NextAuthOptions = {
                         name: user.username
                     };
                 } catch (error) {
-                    /* eslint-disable-next-line no-console */
-                    console.error('Auth error:', error);
+                    log.error('Auth error:', error);
 
                     return null;
                 }

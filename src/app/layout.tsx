@@ -6,7 +6,6 @@ import AuthSessionProvider from '@/ui/SessionProvider';
 
 import './globals.css';
 
-
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin']
@@ -32,9 +31,9 @@ const RootLayout = async ({
     <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthSessionProvider>
             <Header />
-                <main className='min-h-screen'>
-                    {children}
-                </main>
+            <main className='min-h-screen'>
+                {children}
+            </main>
         </AuthSessionProvider>
     </body>
     </html>
