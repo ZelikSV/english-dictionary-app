@@ -2,11 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 
 import LoginForm from '@/ui/LoginForm';
-import {checkDbConnection} from '@/lib/db';
 
 const LoginPage = async () => {
-    await checkDbConnection();
-
     return (
         <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex justify-center p-6'>
             <div className='w-full max-w-md'>
