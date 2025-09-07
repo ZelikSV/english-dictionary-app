@@ -47,6 +47,7 @@ const createWordsGroupsTable = async () => {
         `;
         if (tableExists[0].table_exists) {
             log.info('Table "words_groups" already exists. Everything is OK.');
+
             return;
         }
         await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -78,6 +79,7 @@ const createWordsTable = async () => {
         `;
         if (tableExists[0].table_exists) {
             log.info('Table "words" already exists. Everything is OK.');
+
             return;
         }
         await sql`
