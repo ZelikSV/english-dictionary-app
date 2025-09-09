@@ -155,15 +155,6 @@ export const useWordsStore = create<WordsState>()(
                         throw new Error(`Failed to update IWord: ${response.status}`);
                     }
 
-                    const updatedWord: IWord = await response.json();
-
-                    set(state => ({
-                        wordsList: state.wordsList.map(word =>
-                            word.id === id ? updatedWord : word
-                        ),
-                        isLoading: false
-                    }), false, 'updateWord/success');
-
                 } catch (error) {
                     const errorMessage = error instanceof Error
                         ? error.message
@@ -189,11 +180,6 @@ export const useWordsStore = create<WordsState>()(
                     if (!response.ok) {
                         throw new Error(`Failed to delete IWord: ${response.status}`);
                     }
-
-                    set(state => ({
-                        wordsList: state.wordsList.filter(word => word.id !== id),
-                        isLoading: false
-                    }), false, 'deleteWord/success');
 
                 } catch (error) {
                     const errorMessage = error instanceof Error

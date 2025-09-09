@@ -16,7 +16,7 @@ const EditWordsGroupForm = ({group}: EditWordsGroupFormProps) => {
     const {register, handleSubmit, formState: {errors}, reset, control, setValue, watch} = useForm({
         defaultValues: {
             groupName: group.name,
-            words: group.words.map(word => ({...word, id: word.id || uuidv4()})) as IWordGroupItem[],
+            words: group.words.map(word => (word)) as IWordGroupItem[],
             bulkText: ''
         }
     });
@@ -31,7 +31,7 @@ const EditWordsGroupForm = ({group}: EditWordsGroupFormProps) => {
     useEffect(() => {
         reset({
             groupName: group.name,
-            words: group.words.map(word => ({...word, id: word.id || uuidv4()})) as IWordGroupItem[],
+            words: group.words,
             bulkText: ''
         });
     }, [group, reset]);

@@ -12,6 +12,7 @@ export interface IWordGroup {
     name: string;
     id: string;
     words: IWord[];
+    userId: number;
 }
 
 export interface IDBWord {

@@ -61,23 +61,18 @@ export const useWordsGroupStore = create<WordGroupsState>()(
                 set({selectedGroup: group}, false, 'selectGroup/success');
             },
 
-            addNewGroup: async (groupData: Omit<IWordGroup, 'id'>) => {
+            addNewGroup: async (groupData: IWordGroup) => {
                 set({isLoading: true, error: null}, false, 'addNewGroup/start');
 
                 try {
-                    const response = await fetch(SET_WORDS_GROUPS_URL, {
+                    const res = await fetch(SET_WORDS_GROUPS_URL, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
+                        headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify(groupData)
                     });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
                     }
-
-                    await response.json();
 
                     set({isLoading: false, error: null}, false, 'addNewGroup/success');
                 } catch (error) {

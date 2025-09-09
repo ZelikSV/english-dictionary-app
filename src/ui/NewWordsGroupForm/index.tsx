@@ -1,16 +1,17 @@
 'use client';
-import React from 'react';
+import React, {useState} from 'react';
 import {v4 as uuidv4} from 'uuid';
 import {useForm, useFieldArray} from 'react-hook-form';
 import {useRouter} from 'next/navigation';
 
-import {useAddNewGroup} from '@/stores/useWordsGroupsStore';
 import {IWord, IWordGroupItem, NewWordInput} from '@/types';
 import WordsList from '@/ui/WordsList';
+import {GET_WORDS_GROUPS_URL} from '@/lib/api';
+import Spinner from '@/ui/Spinner';
 
 const NewWordsGroupForm = () => {
-    const createNewGroup = useAddNewGroup();
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
     const {register, handleSubmit, formState: {errors}, reset, control, setValue, watch} = useForm({
         defaultValues: {
             groupName: '',
@@ -64,15 +65,23 @@ const NewWordsGroupForm = () => {
         }
     };
 
-    const onSubmit = (data: {groupName: string, words: IWord[]}) => {
-        createNewGroup({
-            name: data.groupName,
-            words: data.words
-        }).then(() => {
-            reset();
+    const onSubmit = async (data: {groupName: string, words: IWord[]}) => {
+        setIsLoading(true);
 
-            router.push('/');
+        await fetch(`${GET_WORDS_GROUPS_URL}/new`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                words: data.words.map(word => ({id: word.id, en: word.en, ua: word.ua})),
+                id: uuidv4(),
+                name: data.groupName})
         });
+
+        reset();
+
+        setIsLoading(false);
+
+        router.push('/');
     };
 
     return (
@@ -126,10 +135,10 @@ const NewWordsGroupForm = () => {
 
             <button
                 type='submit'
-                disabled={fields.length === 0}
+                disabled={fields.length === 0 || isLoading}
                 className='px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center'
             >
-                Створити групу ({fields.length} слів)
+                {isLoading ? <Spinner /> : `Створити групу (${fields.length}) слів)`}
             </button>
         </form>
     );
