@@ -3,10 +3,12 @@ import {deleteWordsGroup} from '@/lib/actions';
 import {getCurrentUser} from '@/lib/session';
 import {log} from '@/lib/logger';
 
-export const DELETE = async (_: NextRequest, {params}: { params: { id: string } }) =>  {
+export const DELETE = async (
+    request: NextRequest,
+    context: { params: Promise<{ id: string }> }
+) => {
     try {
         const user = await getCurrentUser();
-
         if (!user) {
             return NextResponse.json(
                 {error: 'Unauthorized'},
@@ -14,7 +16,10 @@ export const DELETE = async (_: NextRequest, {params}: { params: { id: string } 
             );
         }
 
-        await deleteWordsGroup(params.id);
+        const params = await context.params;
+        const groupId = params.id;
+
+        await deleteWordsGroup(groupId);
 
         return NextResponse.json({ok: true}, {status: 200});
     } catch (error) {
