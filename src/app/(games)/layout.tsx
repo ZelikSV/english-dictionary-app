@@ -1,8 +1,12 @@
+import React from 'react';
 import NoEmptyWordsPage from '@/ui/NoWordsSelected';
-import {IWordGroup} from '@/types';
+import {cookies} from 'next/headers';
 
-const GamesLayout = ({children, group}: { children: React.ReactNode; group:IWordGroup | undefined}) => {
-    if (!group) {
+const GamesLayout = async ({children}: { children: React.ReactNode;}) => {
+    const cookieStore = await cookies();
+    const selectedGroup = cookieStore.get('group')?.value;
+
+    if (!selectedGroup) {
         return <NoEmptyWordsPage />;
     }
 
