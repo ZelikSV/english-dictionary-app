@@ -1,8 +1,8 @@
+import QuizGame from '@/ui/QuizGame';
+
 const Quiz = () => {
     return (
-        <>
-            Quiz
-        </>
+       <QuizGame />
     );
 };
 

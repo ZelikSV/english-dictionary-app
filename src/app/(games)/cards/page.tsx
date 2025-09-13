@@ -1,8 +1,8 @@
+import CardsGame from '@/ui/CardsGame';
+
 const Cards = () => {
     return (
-        <>
-            Cards Page
-        </>
+        <CardsGame />
     );
 };
 

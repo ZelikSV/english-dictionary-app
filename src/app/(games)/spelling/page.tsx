@@ -1,8 +1,8 @@
+import SpellingGame from '@/ui/SpellingGame';
+
 const Spelling = () => {
     return (
-        <>
-            Spelling
-        </>
+        <SpellingGame />
     );
 };
 
