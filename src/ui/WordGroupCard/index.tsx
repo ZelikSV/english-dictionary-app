@@ -3,6 +3,7 @@
 import {useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
+import Cookies from 'js-cookie';
 
 import {IWordGroup} from '@/types';
 import {GET_WORDS_GROUPS_URL} from '@/lib/api';
@@ -30,6 +31,10 @@ export const WordGroupCard = ({group}: { group: IWordGroup }) => {
             } finally {
             setIsLoading(false);
         }
+    };
+
+    const selectGroup = () => {
+        Cookies.set('group', group.id);
     };
 
     return (
@@ -80,14 +85,15 @@ export const WordGroupCard = ({group}: { group: IWordGroup }) => {
                 )}
             </div>
 
-            <div
+            <button
                 className='w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-3 rounded-xl font-medium hover:from-green-500 hover:to-green-600 transition-all duration-200 flex items-center justify-center space-x-2'
+                onClick={selectGroup}
             >
                 <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
                 </svg>
                 <span>Вибрати групу</span>
-            </div>
+            </button>
         </div>
     );
 };

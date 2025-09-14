@@ -10,6 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import {useRouter} from 'next/navigation';
 import {IWord} from '@/types';
+import {useGetWordsByGroupId} from '@/lib/hooks/useGetWordGroupById';
 
 interface QuestionData {
     word: IWord
@@ -37,20 +38,17 @@ const SpellingGame = () => {
     });
     const [questionQueue, setQuestionQueue] = useState<IWord[]>([]);
     const [mistakeWords, setMistakeWords] = useState<Map<string, number>>(new Map());
-    const wordsList:IWord[] = [];
 
     const MAX_QUESTIONS = 15;
     const MISTAKE_REPEAT_COUNT = 3;
+    const {wordsByGroups, loading} = useGetWordsByGroupId();
 
     useEffect(() => {
-        if (wordsList.length) {
-            initializeGame(wordsList);
-        } else {
-            alert('Спочатку додайте слова на головній сторінці!');
-            router.push('/');
+        if (!loading && wordsByGroups.length) {
+            initializeGame(wordsByGroups);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [wordsList.length]);
+    }, [wordsByGroups.length, loading]);
 
     const initializeGame = (gameWords: IWord[]) => {
         const shuffledWords = [...gameWords].sort(() => Math.random() - 0.5);
@@ -69,7 +67,7 @@ const SpellingGame = () => {
 
         const wordsToRepeat = Array.from(mistakeWords.entries())
             .filter(([_, count]) => count > 0)
-            .map(([id, _]) => wordsList.find(w => w.id === id))
+            .map(([id, _]) => wordsByGroups.find(w => w.id === id))
             .filter(Boolean) as IWord[];
 
         if (wordsToRepeat.length > 0) {
@@ -78,7 +76,7 @@ const SpellingGame = () => {
             const randomIndex = Math.floor(Math.random() * currentQueue.length);
             nextWord = currentQueue[randomIndex];
         } else {
-            const reshuffled = [...wordsList].sort(() => Math.random() - 0.5);
+            const reshuffled = [...wordsByGroups].sort(() => Math.random() - 0.5);
             setQuestionQueue(reshuffled);
             nextWord = reshuffled[0];
         }
@@ -117,8 +115,8 @@ const SpellingGame = () => {
 
     const checkAnswer = () => {
         if (!currentQuestion || !userInput.trim()) {
-return;
-}
+            return;
+        }
 
         const isCorrect = userInput.toLowerCase().trim() === currentQuestion.word.en.toLowerCase();
 
@@ -129,7 +127,6 @@ return;
                 totalQuestions: prev.totalQuestions + 1
             }));
 
-            // Зменшуємо лічильник помилок для цього слова
             if (mistakeWords.has(currentQuestion.word.id)) {
                 setMistakeWords(prev => {
                     const newMap = new Map(prev);
@@ -185,10 +182,10 @@ return;
         setGameFinished(false);
         setMistakeWords(new Map());
         setFeedback({show: false, isCorrect: false, message: ''});
-        initializeGame(wordsList);
+        initializeGame(wordsByGroups);
     };
 
-    if (wordsList.length === 0) {
+    if (loading) {
         return (
             <div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center'>
                 <div className='text-center'>
@@ -248,7 +245,6 @@ return;
     return (
         <div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4'>
             <div className='max-w-2xl mx-auto'>
-                {/* Header */}
                 <div className='flex items-center justify-between mb-8'>
                     <button
                         onClick={() => router.push('/')}
@@ -268,7 +264,6 @@ return;
                     </div>
                 </div>
 
-                {/* Progress bar */}
                 <div className='w-full bg-gray-200 rounded-full h-2 mb-8'>
                     <div
                         className='bg-blue-500 h-2 rounded-full transition-all duration-300'
@@ -276,16 +271,13 @@ return;
                     ></div>
                 </div>
 
-                {/* Game area */}
                 {currentQuestion && (
                     <div className='bg-white rounded-lg shadow-lg p-8'>
-                        {/* Ukrainian translation */}
                         <div className='text-center mb-8'>
                             <p className='text-gray-600 mb-2'>Переклад:</p>
                             <p className='text-3xl font-bold text-gray-800'>{currentQuestion.word.ua}</p>
                         </div>
 
-                        {/* Masked word */}
                         <div className='text-center mb-8'>
                             <p className='text-gray-600 mb-2'>Введіть англійське слово:</p>
                             <p className='text-4xl font-mono font-bold text-blue-600 tracking-wider mb-4'>
@@ -317,8 +309,6 @@ return;
                                 Перевірити
                             </button>
                         </div>
-
-                        {/* Feedback */}
                         {feedback.show && (
                             <div className={`mt-6 p-4 rounded-lg text-center ${
                                 feedback.isCorrect ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'

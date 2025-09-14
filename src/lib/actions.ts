@@ -61,6 +61,38 @@ export const getWordsGroupByUserId = async (): Promise<IWordGroup[]> => {
     }
 };
 
+export const getWordsGroupById = async (id: string): Promise<IWordGroup[]> => {
+    try {
+        const user = await getCurrentUser();
+
+        const groups = await sql<IWordGroup[]>`
+    SELECT 
+        wg.id, 
+        wg.name, 
+        wg.user_id,
+        COALESCE(
+            JSON_AGG(
+                JSON_BUILD_OBJECT('id', w.id, 'en', w.en, 'ua', w.ua)
+            ) FILTER (WHERE w.id IS NOT NULL), 
+            '[]'::json
+        ) as words
+    FROM words_groups wg
+    LEFT JOIN words w ON w.id = ANY(wg.words)
+    WHERE wg.user_id = ${user?.id ?? 0} AND wg.id = ${id}
+    GROUP BY wg.id, wg.name, wg.user_id
+`;
+
+        if (groups.length === 0) {
+            return [];
+        }
+
+        return groups;
+    } catch (error) {
+        log.error('getWordsGroupById', error);
+        throw error;
+    }
+};
+
 export const deleteWordsGroup = async (groupId: string) => {
     try {
         await sql`DELETE FROM words_groups WHERE id = ${groupId}`;

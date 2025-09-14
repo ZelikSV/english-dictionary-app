@@ -9,13 +9,14 @@ import {
 } from '@heroicons/react/24/outline';
 import {useRouter} from 'next/navigation';
 import {IWord} from '@/types';
+import {useGetWordsByGroupId} from '@/lib/hooks/useGetWordGroupById';
 
 interface Card {
     id: string
     word: IWord
     frontText: string
     backText: string
-    frontLanguage: 'english' | 'ukrainian'
+    frontLanguage: 'en' | 'ua'
     isFlipped: boolean
 }
 
@@ -34,46 +35,43 @@ const CardsGame = () => {
         totalFlipped: 0,
         cardsPerRound: 4
     });
-    const [gameLanguage, setGameLanguage] = useState<'english' | 'ukrainian'>('english');
+    const [gameLanguage, setGameLanguage] = useState<'en' | 'ua'>('en');
     const [gameStarted, setGameStarted] = useState(false);
     const [allCardsFlipped, setAllCardsFlipped] = useState(false);
-    const wordsList:IWord[] = [];
+    const {wordsByGroups, loading} = useGetWordsByGroupId();
 
     const CARDS_PER_ROUND = 4;
 
     useEffect(() => {
-        if (wordsList.length) {
-            if (wordsList.length < CARDS_PER_ROUND) {
+        if (!loading) {
+            if (wordsByGroups?.length < CARDS_PER_ROUND) {
                 alert(`Потрібно мінімум ${CARDS_PER_ROUND} слів для вивчення карток!`);
                 router.push('/');
 
                 return;
             }
 
-            setWords(wordsList);
-            initializeGame('english', wordsList);
-        } else {
-            alert('Спочатку додайте слова на головній сторінці!');
-            router.push('/');
+            setWords(wordsByGroups);
+            initializeGame('en', wordsByGroups);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [wordsList.length]);
+    }, [loading, wordsByGroups.length]);
 
-    const initializeGame = (selectedLanguage: 'english' | 'ukrainian', gameWords: IWord[] = words) => {
+    const initializeGame = (selectedLanguage: 'en' | 'ua', gameWords: IWord[] = words) => {
         setGameLanguage(selectedLanguage);
         setGameStarted(true);
         startNewRound(selectedLanguage, gameWords);
     };
 
-    const startNewRound = (language: 'english' | 'ukrainian' = gameLanguage, gameWords: IWord[] = words) => {
+    const startNewRound = (language: 'en' | 'ua' = gameLanguage, gameWords: IWord[] = words) => {
         const shuffledWords = [...gameWords].sort(() => Math.random() - 0.5);
         const selectedWords = shuffledWords.slice(0, CARDS_PER_ROUND);
 
         const newCards: Card[] = selectedWords.map(word => ({
             id: word.id,
             word,
-            frontText: language === 'english' ? word.en : word.ua,
-            backText: language === 'english' ? word.ua : word.en,
+            frontText: language === 'en' ? word.en : word.ua,
+            backText: language === 'en' ? word.ua : word.en,
             frontLanguage: language,
             isFlipped: false
         }));
@@ -106,12 +104,12 @@ const CardsGame = () => {
         startNewRound();
     };
 
-    const changeLanguage = (newLanguage: 'english' | 'ukrainian') => {
+    const changeLanguage = (newLanguage: 'en' | 'ua') => {
         setGameLanguage(newLanguage);
         const updatedCards = currentCards.map(card => ({
             ...card,
-            frontText: newLanguage === 'english' ? card.word.en : card.word.ua,
-            backText: newLanguage === 'english' ? card.word.ua : card.word.en,
+            frontText: newLanguage === 'en' ? card.word.en : card.word.ua,
+            backText: newLanguage === 'en' ? card.word.ua : card.word.en,
             frontLanguage: newLanguage,
             isFlipped: false // Перевертаємо всі картки назад
         }));
@@ -119,7 +117,6 @@ const CardsGame = () => {
         setAllCardsFlipped(false);
     };
 
-    // Видаляємо стартовий екран, одразу показуємо картки
     if (words.length === 0 || !gameStarted) {
         return (
             <div className='min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center'>
@@ -133,7 +130,6 @@ const CardsGame = () => {
     return (
         <div className='min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-4'>
             <div className='max-w-6xl mx-auto'>
-                {/* Header */}
                 <div className='flex items-center justify-between mb-8'>
                     <button
                         onClick={() => router.push('/')}
@@ -149,9 +145,9 @@ const CardsGame = () => {
                             Раунд #{roundStats.currentRound}
                         </p>
                         <p className={`text-sm font-medium ${
-                            gameLanguage === 'english' ? 'text-blue-600' : 'text-yellow-600'
+                            gameLanguage === 'en' ? 'text-blue-600' : 'text-yellow-600'
                         }`}>
-                            {gameLanguage === 'english' ? '🇬🇧 English → Українська' : '🇺🇦 Українська → English'}
+                            {gameLanguage === 'en' ? '🇬🇧 English → Українська' : '🇺🇦 Українська → English'}
                         </p>
                     </div>
 
@@ -159,9 +155,9 @@ const CardsGame = () => {
                         <p className='text-sm text-gray-600 mb-2'>Всього перевернуто: {roundStats.totalFlipped}</p>
                         <div className='flex gap-2'>
                             <button
-                                onClick={() => changeLanguage('english')}
+                                onClick={() => changeLanguage('en')}
                                 className={`px-3 py-1 rounded text-sm transition-colors ${
-                                    gameLanguage === 'english'
+                                    gameLanguage === 'en'
                                         ? 'bg-blue-500 text-white'
                                         : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                 }`}
@@ -169,9 +165,9 @@ const CardsGame = () => {
                                 🇬🇧 EN
                             </button>
                             <button
-                                onClick={() => changeLanguage('ukrainian')}
+                                onClick={() => changeLanguage('ua')}
                                 className={`px-3 py-1 rounded text-sm transition-colors ${
-                                    gameLanguage === 'ukrainian'
+                                    gameLanguage === 'ua'
                                         ? 'bg-yellow-500 text-white'
                                         : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                 }`}
@@ -182,7 +178,6 @@ const CardsGame = () => {
                     </div>
                 </div>
 
-                {/* Instructions */}
                 <div className='text-center mb-8'>
                     <p className='text-lg text-gray-700 mb-2'>
                         Подумайте над перекладом, потім клікніть на картку для перевірки
@@ -195,7 +190,6 @@ const CardsGame = () => {
                     </div>
                 </div>
 
-                {/* Cards Grid */}
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
                     {currentCards.map(card => (
                         <div
@@ -210,14 +204,13 @@ const CardsGame = () => {
                                 onClick={() => flipCard(card.id)}
                                 style={{transformStyle: 'preserve-3d'}}
                             >
-                                {/* Front of card */}
                                 <div
                                     className='absolute inset-0 w-full h-full bg-white rounded-xl shadow-lg border-2 border-gray-300 flex items-center justify-center group-hover:shadow-xl transition-shadow'
                                     style={{backfaceVisibility: 'hidden'}}
                                 >
                                     <div className='text-center p-6'>
                                         <div className='text-xs text-gray-500 mb-3'>
-                                            {gameLanguage === 'english' ? '🇬🇧 English' : '🇺🇦 Українська'}
+                                            {gameLanguage === 'en' ? '🇬🇧 English' : '🇺🇦 Українська'}
                                         </div>
                                         <h3 className='text-2xl lg:text-3xl font-bold text-gray-800 mb-4'>
                                             {card.frontText}
@@ -228,14 +221,13 @@ const CardsGame = () => {
                                     </div>
                                 </div>
 
-                                {/* Back of card */}
                                 <div
                                     className='absolute inset-0 w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl shadow-lg flex items-center justify-center rotate-y-180'
                                     style={{backfaceVisibility: 'hidden'}}
                                 >
                                     <div className='text-center p-6'>
                                         <div className='text-xs text-white opacity-90 mb-3'>
-                                            {gameLanguage === 'english' ? '🇺🇦 Переклад' : '🇬🇧 Translation'}
+                                            {gameLanguage === 'en' ? '🇺🇦 Переклад' : '🇬🇧 Translation'}
                                         </div>
                                         <h3 className='text-2xl lg:text-3xl font-bold text-white mb-4'>
                                             {card.backText}
@@ -250,7 +242,6 @@ const CardsGame = () => {
                     ))}
                 </div>
 
-                {/* Round completion */}
                 {allCardsFlipped && (
                     <div className='text-center'>
                         <div className='bg-white rounded-lg shadow-lg p-6 mb-6 max-w-md mx-auto'>

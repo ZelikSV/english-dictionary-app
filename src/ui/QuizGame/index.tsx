@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/24/outline';
 import {useRouter} from 'next/navigation';
 import {IWord} from '@/types';
+import {useGetWordsByGroupId} from '@/lib/hooks/useGetWordGroupById';
 
 interface QuizQuestion {
     id: string
@@ -49,28 +50,24 @@ const QuizGame = ()=>  {
     const [selectedOption, setSelectedOption] = useState<string>('');
     const [timeLeft, setTimeLeft] = useState(30);
     const [timerActive, setTimerActive] = useState(false);
-    const wordsList:IWord[] = [];
+    const {wordsByGroups, loading} = useGetWordsByGroupId();
 
     const MAX_QUESTIONS = 25;
     const TIME_PER_QUESTION = 30;
 
     useEffect(() => {
-        if (wordsList.length) {
-
-            if (wordsList.length < 4) {
+        if (!loading && wordsByGroups.length) {
+            if (wordsByGroups.length < 4) {
                 alert('Потрібно мінімум 4 слова для проведення тестування!');
                 router.push('/');
 
                 return;
             }
 
-            initializeQuiz(wordsList);
-        } else {
-            alert('Спочатку додайте слова на головній сторінці!');
-            router.push('/');
+            initializeQuiz(wordsByGroups);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [router]);
+    }, [wordsByGroups, loading]);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -96,7 +93,7 @@ const QuizGame = ()=>  {
         generateNextQuestion(gameWords);
     };
 
-    const generateNextQuestion = (gameWords: IWord[] = wordsList) => {
+    const generateNextQuestion = (gameWords: IWord[] = wordsByGroups) => {
         if (quizStats.totalQuestions >= MAX_QUESTIONS) {
             setGameFinished(true);
             setTimerActive(false);
@@ -199,10 +196,10 @@ const QuizGame = ()=>  {
         setFeedback({show: false, isCorrect: false, correctAnswer: '', selectedAnswer: ''});
         setSelectedOption('');
         setTimerActive(false);
-        initializeQuiz(wordsList);
+        initializeQuiz(wordsByGroups);
     };
 
-    if (wordsList.length === 0) {
+    if (loading) {
         return (
             <div className='min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center'>
                 <div className='text-center'>
@@ -279,7 +276,6 @@ const QuizGame = ()=>  {
     return (
         <div className='min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 p-4'>
             <div className='max-w-3xl mx-auto'>
-                {/* Header */}
                 <div className='flex items-center justify-between mb-8'>
                     <button
                         onClick={() => router.push('/')}
@@ -303,7 +299,6 @@ const QuizGame = ()=>  {
                     </div>
                 </div>
 
-                {/* Progress bar */}
                 <div className='w-full bg-gray-200 rounded-full h-3 mb-8'>
                     <div
                         className='bg-green-500 h-3 rounded-full transition-all duration-300'
@@ -311,7 +306,6 @@ const QuizGame = ()=>  {
                     ></div>
                 </div>
 
-                {/* Timer bar */}
                 <div className='w-full bg-gray-200 rounded-full h-2 mb-8'>
                     <div
                         className={`h-2 rounded-full transition-all duration-1000 ${
@@ -321,10 +315,8 @@ const QuizGame = ()=>  {
                     ></div>
                 </div>
 
-                {/* Question area */}
                 {currentQuestion && (
                     <div className='bg-white rounded-lg shadow-lg p-8'>
-                        {/* Language indicator */}
                         <div className='text-center mb-4'>
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                   currentQuestion.questionLanguage === 'en'
@@ -335,7 +327,6 @@ const QuizGame = ()=>  {
               </span>
                         </div>
 
-                        {/* Question */}
                         <div className='text-center mb-8'>
                             <p className='text-gray-600 mb-2'>
                                 {currentQuestion.questionLanguage === 'en'
