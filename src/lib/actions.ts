@@ -1,4 +1,4 @@
-import {IWordGroup} from '@/types';
+import {IWordGroup, UpdateWordsGroupPayload} from '@/types';
 import {sql} from './db';
 import {getCurrentUser} from '@/lib/session';
 import {log} from '@/lib/logger';
@@ -98,6 +98,83 @@ export const deleteWordsGroup = async (groupId: string) => {
         await sql`DELETE FROM words_groups WHERE id = ${groupId}`;
     } catch (error) {
         log.error('deleteWordsGroup', error);
+        throw error;
+    }
+};
+
+export const updateWordsGroup = async (payload: UpdateWordsGroupPayload) => {
+    try {
+        await sql.begin(async trx => {
+            const {operations, name, id} = payload;
+            const currentGroupResult = await trx`
+                SELECT words FROM words_groups WHERE id = ${id}
+            `;
+            let currentWordIds = (currentGroupResult[0]?.words as string[]) || [];
+
+            if (operations.create.length > 0) {
+                const newWordIds = await Promise.all(
+                    operations.create.map(async word => {
+                        const result = await trx`
+                            INSERT INTO words (en, ua)
+                            VALUES (${word.en}, ${word.ua})
+                            RETURNING id
+                        `;
+
+                        return result[0].id as string;
+                    })
+                );
+                currentWordIds = [...currentWordIds, ...newWordIds];
+            }
+
+            if (operations.update.length > 0) {
+                await Promise.all(
+                    operations.update.map(word =>
+                        trx`
+                            UPDATE words 
+                            SET en = ${word.en}, ua = ${word.ua}
+                            WHERE id = ${word.id}
+                        `
+                    )
+                );
+            }
+
+            if (operations.removeFromGroup.length > 0) {
+                currentWordIds = currentWordIds.filter(wordId =>
+                    !operations.removeFromGroup.includes(wordId)
+                );
+
+                const unusedWordsResult = await trx`
+                    SELECT w.id 
+                    FROM words w
+                    WHERE w.id = ANY(${operations.removeFromGroup})
+                    AND NOT EXISTS (
+                        SELECT 1 FROM words_groups wg 
+                        WHERE wg.id != ${id} 
+                        AND w.id = ANY(wg.words)
+                    )
+                `;
+
+                const unusedWordIds = unusedWordsResult.map(row => row.id as string);
+
+                if (unusedWordIds.length > 0) {
+                    await trx`
+                        DELETE FROM words 
+                        WHERE id = ANY(${unusedWordIds})
+                    `;
+                }
+            }
+
+            await trx`
+                UPDATE words_groups 
+                SET 
+                    name = ${name},
+                    words = ${currentWordIds},
+                    updated_at = NOW()
+                WHERE id = ${id}
+            `;
+        });
+    } catch (error) {
+        log.error('updateWordsGroup', error);
         throw error;
     }
 };

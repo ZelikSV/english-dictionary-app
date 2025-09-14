@@ -1,13 +1,13 @@
 import EditWordsGroupForm from '@/ui/EditWordsGroupForm';
-import {wordGroups} from '@/lib/constants';
 import Breadcrumbs from '@/ui/Breadcrumbs';
+import {getWordsGroupById} from '@/lib/actions';
 
 const GroupsEdit = async (props: { params: Promise<{ id: string }> })=> {
     const {id} = await props.params;
 
-    const group = wordGroups.find(el => el.id === id);
+    const group = await getWordsGroupById(id);
 
-    if (!group) {
+    if (!group.length) {
         return null;
     }
 
@@ -20,7 +20,7 @@ const GroupsEdit = async (props: { params: Promise<{ id: string }> })=> {
                     active: true
                 }
             ]} showBackButton={false} />
-            <EditWordsGroupForm group={group} />
+            <EditWordsGroupForm group={group[0]} />
         </div>
     );
 };

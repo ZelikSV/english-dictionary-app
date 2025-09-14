@@ -1,11 +1,11 @@
 'use client';
 import React, {useEffect} from 'react';
-import {v4 as uuidv4} from 'uuid';
 import {useForm, useFieldArray} from 'react-hook-form';
 import {useRouter} from 'next/navigation';
 
 import {IWord, IWordGroupItem, NewWordInput, IWordGroup} from '@/types';
 import WordsList from '@/ui/WordsList';
+import {GET_WORDS_GROUPS_URL} from '@/lib/api';
 
 interface EditWordsGroupFormProps {
     group: IWordGroup;
@@ -15,15 +15,17 @@ const EditWordsGroupForm = ({group}: EditWordsGroupFormProps) => {
     const router = useRouter();
     const {register, handleSubmit, formState: {errors}, reset, control, setValue, watch} = useForm({
         defaultValues: {
+            id: group.id,
             groupName: group.name,
-            words: group.words.map(word => (word)) as IWordGroupItem[],
+            words: group.words,
             bulkText: ''
         }
     });
 
     const {fields, append, remove, update} = useFieldArray({
         control,
-        name: 'words'
+        name: 'words',
+        keyName: 'id'
     });
 
     const watchedBulkText = watch('bulkText');
@@ -45,6 +47,7 @@ const EditWordsGroupForm = ({group}: EditWordsGroupFormProps) => {
 
     const handleUpdateWord = (id: string, updatedWord: Partial<NewWordInput>) => {
         const wordIndex = fields.findIndex(word => word.id === id);
+
         if (wordIndex !== -1) {
             update(wordIndex, {...fields[wordIndex], ...updatedWord});
         }
@@ -57,7 +60,6 @@ const EditWordsGroupForm = ({group}: EditWordsGroupFormProps) => {
                 const parts = line.split(' - ');
                 if (parts.length === 2 && parts[0].trim() && parts[1].trim()) {
                     return {
-                        id: uuidv4(),
                         en: parts[0].trim(),
                         ua: parts[1].trim()
                     };
@@ -73,8 +75,44 @@ const EditWordsGroupForm = ({group}: EditWordsGroupFormProps) => {
         }
     };
 
-    const onSubmit = (_: {groupName: string, words: IWord[]}) => {
-        // TODO add new action here
+    const onSubmit = async (formData: {groupName: string, words: IWord[]}) => {
+        const originalWords = group.words || [];
+        const newWords = formData.words.filter(word => !word.id);
+        const updatedWords = formData.words.filter(word => {
+            if (!word.id) {
+                return false;
+            }
+
+            const originalWord = originalWords.find(orig => orig.id === word.id);
+
+            return originalWord && (
+                originalWord.en !== word.en ||
+                originalWord.ua !== word.ua
+            );
+        });
+
+        const removedFromGroupIds = originalWords
+            .filter(originalWord =>
+                !formData.words.find(word => word.id === originalWord.id)
+            )
+            .map(word => word.id);
+
+        const payload = {
+            id: group.id,
+            name: formData.groupName,
+            operations: {
+                create: newWords.map(word => ({en: word.en, ua: word.ua})),
+                update: updatedWords.map(word => ({id: word.id, en: word.en, ua: word.ua})),
+                removeFromGroup: removedFromGroupIds
+            }
+        };
+
+        await fetch(`${GET_WORDS_GROUPS_URL}/${group.id}`, {
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+
         router.push('/');
     };
 
