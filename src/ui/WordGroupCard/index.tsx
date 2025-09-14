@@ -3,16 +3,17 @@
 import {useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
-import Cookies from 'js-cookie';
 
 import {IWordGroup} from '@/types';
 import {GET_WORDS_GROUPS_URL} from '@/lib/api';
 import {log} from '@/lib/logger';
 import Spinner from '@/ui/Spinner';
+import {useSelectGroup} from '@/lib/hooks/useSelectGroup';
 
 export const WordGroupCard = ({group}: { group: IWordGroup }) => {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const {isSelectingGroup, handleSelectGroup} = useSelectGroup(group.id);
 
     const handleDeleteGroup = async () => {
         setIsLoading(true);
@@ -31,10 +32,6 @@ export const WordGroupCard = ({group}: { group: IWordGroup }) => {
             } finally {
             setIsLoading(false);
         }
-    };
-
-    const selectGroup = () => {
-        Cookies.set('group', group.id);
     };
 
     return (
@@ -87,12 +84,18 @@ export const WordGroupCard = ({group}: { group: IWordGroup }) => {
 
             <button
                 className='w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-3 rounded-xl font-medium hover:from-green-500 hover:to-green-600 transition-all duration-200 flex items-center justify-center space-x-2'
-                onClick={selectGroup}
+                disabled={isSelectingGroup}
+                onClick={handleSelectGroup}
             >
-                <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-                </svg>
-                <span>Вибрати групу</span>
+                {
+                    isSelectingGroup ? <Spinner /> :
+                        <>
+                            <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
+                            </svg>
+                            <span>Вибрати групу</span>
+                        </>
+                }
             </button>
         </div>
     );

@@ -100,6 +100,5 @@ export const useSelectedGroup = () => useWordsGroupStore(state => state.selected
 
 
 // ACTIONS HOOKS
-export const useSelectGroup = () => useWordsGroupStore(state => state.selectGroup);
 export const useGetWordsGroups = () => useWordsGroupStore(state => state.getWordsGroups);
 export const useAddNewGroup = () => useWordsGroupStore(state => state.addNewGroup);
