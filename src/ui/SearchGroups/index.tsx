@@ -1,18 +1,39 @@
 'use client';
 
-import {useState} from 'react';
+import {useState, useEffect, ChangeEvent} from 'react';
+import {useRouter, useSearchParams} from 'next/navigation';
+import {useDebouncedCallback} from 'use-debounce';
 
 export const SearchGroups = () => {
-    const [searchQuery, setSearchQuery] = useState('');
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [searchQuery, setSearchQuery] = useState(searchParams.get('search') ?? '');
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const debouncedSearch = useDebouncedCallback((query: string) => {
+        const params = new URLSearchParams(searchParams);
+
+        if (query) {
+            params.set('search', query);
+        } else {
+            params.delete('search');
+        }
+        router.push(`/?${params.toString()}`);
+    }, 300);
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const query = e.target.value;
         setSearchQuery(query);
+        debouncedSearch(query);
     };
 
     const clearSearch = () => {
         setSearchQuery('');
+        debouncedSearch('');
     };
+
+    useEffect(() => {
+        setSearchQuery(searchParams.get('search') ?? '');
+    }, [searchParams]);
 
     return (
         <div className='relative w-full max-w-md'>

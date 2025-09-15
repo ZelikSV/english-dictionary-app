@@ -5,8 +5,9 @@ import {SearchGroups} from '@/ui/SearchGroups';
 import ActivityCards from '@/ui/ActivityCards';
 import {getWordsGroupByUserId} from '@/lib/actions';
 
-const Home = async () => {
-    const wordGroups = await getWordsGroupByUserId();
+const Home = async ({searchParams}: { searchParams: { search?: string } }) => {
+    const {search} = await searchParams;
+    const wordGroups = await getWordsGroupByUserId(search);
 
     return (
         <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6'>

@@ -29,7 +29,7 @@ export const createWordsGroup = async (wordsGroup: IWordGroup) => {
     }
 };
 
-export const getWordsGroupByUserId = async (): Promise<IWordGroup[]> => {
+export const getWordsGroupByUserId = async (search: string = ''): Promise<IWordGroup[]> => {
     try {
         const user = await getCurrentUser();
 
@@ -47,7 +47,9 @@ export const getWordsGroupByUserId = async (): Promise<IWordGroup[]> => {
     FROM words_groups wg
     LEFT JOIN words w ON w.id = ANY(wg.words)
     WHERE wg.user_id = ${user?.id ?? 0}
+    ${search ? sql`AND LOWER(wg.name) LIKE ${`%${search.toLowerCase()}%`}` : sql``}
     GROUP BY wg.id, wg.name, wg.user_id
+    ORDER BY wg.name
 `;
 
         if (groups.length === 0) {

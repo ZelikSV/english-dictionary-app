@@ -17,9 +17,13 @@ const WordsList = ({words, onDeleteWord, onUpdateWord}: WordsListProps) => {
     const [editingIndex, setEditingIndex] = useState<number>(-1);
     const [editingWord, setEditingWord] = useState<NewWordInput>({en: '', ua: ''});
 
-    const startEdit = (index: number, word: IWordGroupItem) => {
+    const startEdit = (index: number, word: IWordGroupItem) => () => {
         setEditingIndex(index);
         setEditingWord({en: word.en, ua: word.ua});
+    };
+
+    const handleDeleteWord = (id: string) => () => {
+        onDeleteWord(id);
     };
 
     const saveEdit = () => {
@@ -50,12 +54,14 @@ const WordsList = ({words, onDeleteWord, onUpdateWord}: WordsListProps) => {
                         {editingIndex === index ? (
                             <div className='flex gap-2 flex-1'>
                                 <input
+                                    key={`${word.id}-en`}
                                     type='text'
                                     value={editingWord.en}
                                     onChange={e => setEditingWord({...editingWord, en: e.target.value})}
                                     className='flex-1 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black'
                                 />
                                 <input
+                                    key={`${word.id}-ua`}
                                     type='text'
                                     value={editingWord.ua}
                                     onChange={e => setEditingWord({...editingWord, ua: e.target.value})}
@@ -83,13 +89,13 @@ const WordsList = ({words, onDeleteWord, onUpdateWord}: WordsListProps) => {
                                 </div>
                                 <div className='flex gap-2'>
                                     <button
-                                        onClick={() => startEdit(index, word)}
+                                        onClick={startEdit(index, word)}
                                         className='text-blue-500 hover:text-blue-700 transition-colors'
                                     >
                                         <PencilIcon className='w-4 h-4' />
                                     </button>
                                     <button
-                                        onClick={() => onDeleteWord(word.id)}
+                                        onClick={handleDeleteWord(word.id)}
                                         className='text-red-500 hover:text-red-700 transition-colors'
                                     >
                                         <TrashIcon className='w-4 h-4' />
