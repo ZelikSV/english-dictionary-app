@@ -10,6 +10,7 @@ import {
 import {useRouter} from 'next/navigation';
 import {IWord} from '@/types';
 import {useGetWordsByGroupId} from '@/lib/hooks/useGetWordGroupById';
+import {Loading} from '@/ui/Loading';
 
 interface Card {
     id: string
@@ -118,13 +119,7 @@ const CardsGame = () => {
     };
 
     if (words.length === 0 || !gameStarted) {
-        return (
-            <div className='min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center'>
-                <div className='text-center'>
-                    <p className='text-gray-600 mb-4'>Завантаження карток...</p>
-                </div>
-            </div>
-        );
+        return (<Loading />);
     }
 
     return (

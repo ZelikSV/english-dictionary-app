@@ -11,6 +11,7 @@ import {
 import {useRouter} from 'next/navigation';
 import {IWord} from '@/types';
 import {useGetWordsByGroupId} from '@/lib/hooks/useGetWordGroupById';
+import {Loading} from '@/ui/Loading';
 
 interface QuestionData {
     word: IWord
@@ -186,13 +187,7 @@ const SpellingGame = () => {
     };
 
     if (loading) {
-        return (
-            <div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center'>
-                <div className='text-center'>
-                    <p className='text-gray-600 mb-4'>Завантаження слів...</p>
-                </div>
-            </div>
-        );
+        return (<Loading />);
     }
 
     if (gameFinished) {

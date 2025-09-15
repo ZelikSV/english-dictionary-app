@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-const NoEmptyWordsPage = () => {
+const EmptyWordsPage = () => {
     return (
         <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-6'>
             <div className='max-w-md w-full'>
@@ -35,4 +35,4 @@ const NoEmptyWordsPage = () => {
     );
 };
 
-export default NoEmptyWordsPage;
+export default EmptyWordsPage;

@@ -3,17 +3,16 @@
 import {useState, useEffect} from 'react';
 import {
     ArrowLeftIcon,
-    CheckIcon,
-    XMarkIcon,
-    ArrowPathIcon,
-    HomeIcon,
     ClockIcon
 } from '@heroicons/react/24/outline';
 import {useRouter} from 'next/navigation';
 import {IWord} from '@/types';
 import {useGetWordsByGroupId} from '@/lib/hooks/useGetWordGroupById';
+import {Loading} from '@/ui/Loading';
+import {QuizResult} from '@/ui/QuizGame/QuizeResult';
+import {QuizQuestion} from '@/ui/QuizGame/QuizQuestion';
 
-interface QuizQuestion {
+export interface IQuizQuestion {
     id: string
     questionWord: string
     questionLanguage: 'en' | 'ua'
@@ -22,26 +21,25 @@ interface QuizQuestion {
     correctWordId: string
 }
 
-interface QuizStats {
+export interface IQuizStats {
     correct: number
     incorrect: number
     totalQuestions: number
 }
 
-interface AnswerFeedback {
+export interface IAnswerFeedback {
     show: boolean
     isCorrect: boolean
     correctAnswer: string
     selectedAnswer: string
 }
 
-// eslint-disable-next-line complexity
 const QuizGame = ()=>  {
     const router = useRouter();
-    const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
-    const [quizStats, setQuizStats] = useState<QuizStats>({correct: 0, incorrect: 0, totalQuestions: 0});
+    const [currentQuestion, setCurrentQuestion] = useState<IQuizQuestion | null>(null);
+    const [quizStats, setQuizStats] = useState<IQuizStats>({correct: 0, incorrect: 0, totalQuestions: 0});
     const [gameFinished, setGameFinished] = useState(false);
-    const [feedback, setFeedback] = useState<AnswerFeedback>({
+    const [feedback, setFeedback] = useState<IAnswerFeedback>({
         show: false,
         isCorrect: false,
         correctAnswer: '',
@@ -112,7 +110,7 @@ const QuizGame = ()=>  {
 
         const allOptions = [correctAnswer, ...incorrectOptions].sort(() => Math.random() - 0.5);
 
-        const newQuestion: QuizQuestion = {
+        const newQuestion: IQuizQuestion = {
             id: Date.now().toLocaleString(),
             questionWord: questionText,
             questionLanguage,
@@ -137,7 +135,7 @@ const QuizGame = ()=>  {
         return shuffled.slice(0, 3).map(word => word[targetLanguage]);
     };
 
-    const handleAnswerSelect = (option: string) => {
+    const handleAnswerSelect = (option: string) => ()  => {
         if (feedback.show || !currentQuestion) {
             return;
         }
@@ -199,78 +197,16 @@ const QuizGame = ()=>  {
         initializeQuiz(wordsByGroups);
     };
 
+    const handleBackToHomePage = () => {
+        router.push('/');
+    };
+
     if (loading) {
-        return (
-            <div className='min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center'>
-                <div className='text-center'>
-                    <p className='text-gray-600 mb-4'>Завантаження слів...</p>
-                </div>
-            </div>
-        );
+        return (<Loading />);
     }
 
     if (gameFinished) {
-        const accuracy = quizStats.totalQuestions > 0 ? (quizStats.correct / quizStats.totalQuestions) * 100 : 0;
-        let gradeText = '';
-        let gradeColor = '';
-
-        if (accuracy >= 90) {
-            gradeText = 'Відмінно! 🏆';
-            gradeColor = 'text-yellow-600';
-        } else if (accuracy >= 75) {
-            gradeText = 'Добре! 🎯';
-            gradeColor = 'text-green-600';
-        } else if (accuracy >= 60) {
-            gradeText = 'Задовільно 📚';
-            gradeColor = 'text-blue-600';
-        } else {
-            gradeText = 'Потрібно практика 💪';
-            gradeColor = 'text-orange-600';
-        }
-
-        return (
-            <div className='min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4'>
-                <div className='bg-white rounded-lg shadow-xl p-8 max-w-md w-full text-center'>
-                    <h1 className='text-3xl font-bold text-gray-800 mb-2'>Тестування завершено!</h1>
-                    <p className={`text-xl font-semibold mb-6 ${gradeColor}`}>{gradeText}</p>
-
-                    <div className='space-y-4 mb-8'>
-                        <div className='bg-green-50 p-4 rounded-lg'>
-                            <p className='text-green-800 font-semibold'>Правильних відповідей</p>
-                            <p className='text-3xl font-bold text-green-600'>{quizStats.correct}</p>
-                        </div>
-
-                        <div className='bg-red-50 p-4 rounded-lg'>
-                            <p className='text-red-800 font-semibold'>Неправильних відповідей</p>
-                            <p className='text-3xl font-bold text-red-600'>{quizStats.incorrect}</p>
-                        </div>
-
-                        <div className='bg-blue-50 p-4 rounded-lg'>
-                            <p className='text-blue-800 font-semibold'>Результат</p>
-                            <p className='text-3xl font-bold text-blue-600'>{accuracy.toFixed(1)}%</p>
-                        </div>
-                    </div>
-
-                    <div className='flex gap-4'>
-                        <button
-                            onClick={restartQuiz}
-                            className='flex-1 bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center'
-                        >
-                            <ArrowPathIcon className='w-5 h-5 mr-2' />
-                            Пройти знову
-                        </button>
-
-                        <button
-                            onClick={() => router.push('/')}
-                            className='flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center'
-                        >
-                            <HomeIcon className='w-5 h-5 mr-2' />
-                            На головну
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
+        return (<QuizResult quizStats={quizStats} restartQuiz={restartQuiz} handleBackToHomePage={handleBackToHomePage}/>);
     }
 
     return (
@@ -278,7 +214,7 @@ const QuizGame = ()=>  {
             <div className='max-w-3xl mx-auto'>
                 <div className='flex items-center justify-between mb-8'>
                     <button
-                        onClick={() => router.push('/')}
+                        onClick={handleBackToHomePage}
                         className='flex items-center text-gray-600 hover:text-gray-800 transition-colors'
                     >
                         <ArrowLeftIcon className='w-5 h-5 mr-2' />
@@ -303,7 +239,7 @@ const QuizGame = ()=>  {
                     <div
                         className='bg-green-500 h-3 rounded-full transition-all duration-300'
                         style={{width: `${(quizStats.totalQuestions / MAX_QUESTIONS) * 100}%`}}
-                    ></div>
+                    />
                 </div>
 
                 <div className='w-full bg-gray-200 rounded-full h-2 mb-8'>
@@ -315,91 +251,7 @@ const QuizGame = ()=>  {
                     ></div>
                 </div>
 
-                {currentQuestion && (
-                    <div className='bg-white rounded-lg shadow-lg p-8'>
-                        <div className='text-center mb-4'>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  currentQuestion.questionLanguage === 'en'
-                      ? 'bg-blue-100 text-blue-800'
-                      : 'bg-yellow-100 text-yellow-800'
-              }`}>
-                {currentQuestion.questionLanguage === 'en' ? '🇬🇧 English' : '🇺🇦 Українська'}
-              </span>
-                        </div>
-
-                        <div className='text-center mb-8'>
-                            <p className='text-gray-600 mb-2'>
-                                {currentQuestion.questionLanguage === 'en'
-                                    ? 'Оберіть переклад слова:'
-                                    : 'Оберіть англійський переклад:'}
-                            </p>
-                            <p className='text-4xl font-bold text-gray-800 mb-4'>
-                                {currentQuestion.questionWord}
-                            </p>
-                        </div>
-
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-6'>
-                            {currentQuestion.options.map((option, index) => {
-                                let buttonClass = 'w-full p-4 text-left border-2 rounded-lg transition-all duration-200 font-medium';
-
-                                if (feedback.show) {
-                                    if (option === currentQuestion.correctAnswer) {
-                                        buttonClass += ' bg-green-100 border-green-500 text-green-800';
-                                    } else if (option === selectedOption && option !== currentQuestion.correctAnswer) {
-                                        buttonClass += ' bg-red-100 border-red-500 text-red-800';
-                                    } else {
-                                        buttonClass += ' bg-gray-50 border-gray-300 text-gray-500';
-                                    }
-                                } else {
-                                    if (selectedOption === option) {
-                                        buttonClass += ' bg-blue-100 border-blue-500 text-blue-800';
-                                    } else {
-                                        buttonClass += ' bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400';
-                                    }
-                                }
-
-                                return (
-                                    <button
-                                        key={index}
-                                        onClick={() => handleAnswerSelect(option)}
-                                        disabled={feedback.show}
-                                        className={buttonClass}
-                                    >
-                    <span className='text-sm text-gray-500 block mb-1'>
-                      {String.fromCharCode(65 + index)}
-                    </span>
-                                        {option}
-                                    </button>
-                                );
-                            })}
-                        </div>
-
-                        {feedback.show && (
-                            <div className={`p-4 rounded-lg text-center ${
-                                feedback.isCorrect ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
-                            }`}>
-                                <div className='flex items-center justify-center mb-2'>
-                                    {feedback.isCorrect ? (
-                                        <CheckIcon className='w-6 h-6 mr-2' />
-                                    ) : (
-                                        <XMarkIcon className='w-6 h-6 mr-2' />
-                                    )}
-                                    <span className='font-semibold'>
-                    {feedback.isCorrect ? 'Правильно!' : 'Неправильно'}
-                  </span>
-                                </div>
-                                {!feedback.isCorrect && (
-                                    <p className='text-sm'>
-                                        {feedback.selectedAnswer === 'Час вийшов'
-                                            ? `Час вийшов! Правильна відповідь: ${feedback.correctAnswer}`
-                                            : `Правильна відповідь: ${feedback.correctAnswer}`
-                                        }
-                                    </p>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                )}
+                {currentQuestion && <QuizQuestion feedback={feedback} currentQuestion={currentQuestion} selectedOption={selectedOption} handleAnswerSelect={handleAnswerSelect}/>}
             </div>
         </div>
     );
