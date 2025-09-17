@@ -7,7 +7,7 @@ import {HeaderActions} from '@/ui/HeaderActions';
 
 export const Header = () => {
     return (
-        <div className='bg-gradient-to-r from-gray-50 to-gray-100 shadow-sm border-b border-gray-200/30'>
+        <div className='fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-gray-50 to-gray-100 shadow-sm border-b border-gray-200/30'>
             <div className='max-w-7xl mx-auto px-6 sm:px-8 lg:px-12'>
                 <div className='flex justify-between items-center h-18 py-3'>
                     <div className='flex items-center'>

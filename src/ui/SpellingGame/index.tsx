@@ -1,29 +1,31 @@
 'use client';
 
 import {useState, useEffect} from 'react';
-import {
-    ArrowLeftIcon,
-    CheckIcon,
-    XMarkIcon,
-    ArrowPathIcon,
-    HomeIcon
-} from '@heroicons/react/24/outline';
+import {ArrowLeftIcon} from '@heroicons/react/24/outline';
 import {useRouter} from 'next/navigation';
 import {IWord} from '@/types';
 import {useGetWordsByGroupId} from '@/lib/hooks/useGetWordGroupById';
 import {Loading} from '@/ui/Loading';
+import {GameResults} from '@/ui/SpellingGame/GameResults';
+import {GameQuestion} from '@/ui/SpellingGame/GameQuestion';
 
-interface QuestionData {
-    word: IWord
-    maskedWord: string
-    attempts: number
-    isCorrect: boolean
+export interface QuestionData {
+    word: IWord;
+    maskedWord: string;
+    attempts: number;
+    isCorrect: boolean;
 }
 
-interface GameStats {
-    correct: number
-    incorrect: number
-    totalQuestions: number
+export interface GameStats {
+    correct: number;
+    incorrect: number;
+    totalQuestions: number;
+}
+
+export interface IFeedback {
+    show: boolean;
+    isCorrect: boolean;
+    message: string;
 }
 
 const SpellingGame = () => {
@@ -32,7 +34,7 @@ const SpellingGame = () => {
     const [userInput, setUserInput] = useState('');
     const [gameStats, setGameStats] = useState<GameStats>({correct: 0, incorrect: 0, totalQuestions: 0});
     const [gameFinished, setGameFinished] = useState(false);
-    const [feedback, setFeedback] = useState<{ show: boolean; isCorrect: boolean; message: string }>({
+    const [feedback, setFeedback] = useState<IFeedback>({
         show: false,
         isCorrect: false,
         message: ''
@@ -172,12 +174,6 @@ const SpellingGame = () => {
         }, 2000);
     };
 
-    const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && !feedback.show) {
-            checkAnswer();
-        }
-    };
-
     const restartGame = () => {
         setGameStats({correct: 0, incorrect: 0, totalQuestions: 0});
         setGameFinished(false);
@@ -186,54 +182,17 @@ const SpellingGame = () => {
         initializeGame(wordsByGroups);
     };
 
+    const handleBackToHomePage = () => {
+        router.push('/');
+    };
+
     if (loading) {
         return (<Loading />);
     }
 
     if (gameFinished) {
-        const accuracy = gameStats.totalQuestions > 0 ? (gameStats.correct / gameStats.totalQuestions) * 100 : 0;
-
         return (
-            <div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4'>
-                <div className='bg-white rounded-lg shadow-xl p-8 max-w-md w-full text-center'>
-                    <h1 className='text-3xl font-bold text-gray-800 mb-6'>Гра завершена! 🎯</h1>
-
-                    <div className='space-y-4 mb-8'>
-                        <div className='bg-green-50 p-4 rounded-lg'>
-                            <p className='text-green-800 font-semibold'>Правильних відповідей</p>
-                            <p className='text-3xl font-bold text-green-600'>{gameStats.correct}</p>
-                        </div>
-
-                        <div className='bg-red-50 p-4 rounded-lg'>
-                            <p className='text-red-800 font-semibold'>Неправильних відповідей</p>
-                            <p className='text-3xl font-bold text-red-600'>{gameStats.incorrect}</p>
-                        </div>
-
-                        <div className='bg-blue-50 p-4 rounded-lg'>
-                            <p className='text-blue-800 font-semibold'>Точність</p>
-                            <p className='text-3xl font-bold text-blue-600'>{accuracy.toFixed(1)}%</p>
-                        </div>
-                    </div>
-
-                    <div className='flex gap-4'>
-                        <button
-                            onClick={restartGame}
-                            className='flex-1 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center'
-                        >
-                            <ArrowPathIcon className='w-5 h-5 mr-2' />
-                            Грати знову
-                        </button>
-
-                        <button
-                            onClick={() => router.push('/')}
-                            className='flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center'
-                        >
-                            <HomeIcon className='w-5 h-5 mr-2' />
-                            На головну
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <GameResults gameStats={gameStats} restartGame={restartGame} handleBackToHomePage={handleBackToHomePage}/>
         );
     }
 
@@ -242,7 +201,7 @@ const SpellingGame = () => {
             <div className='max-w-2xl mx-auto'>
                 <div className='flex items-center justify-between mb-8'>
                     <button
-                        onClick={() => router.push('/')}
+                        onClick={handleBackToHomePage}
                         className='flex items-center text-gray-600 hover:text-gray-800 transition-colors'
                     >
                         <ArrowLeftIcon className='w-5 h-5 mr-2' />
@@ -263,63 +222,16 @@ const SpellingGame = () => {
                     <div
                         className='bg-blue-500 h-2 rounded-full transition-all duration-300'
                         style={{width: `${(gameStats.totalQuestions / MAX_QUESTIONS) * 100}%`}}
-                    ></div>
+                    />
                 </div>
 
-                {currentQuestion && (
-                    <div className='bg-white rounded-lg shadow-lg p-8'>
-                        <div className='text-center mb-8'>
-                            <p className='text-gray-600 mb-2'>Переклад:</p>
-                            <p className='text-3xl font-bold text-gray-800'>{currentQuestion.word.ua}</p>
-                        </div>
-
-                        <div className='text-center mb-8'>
-                            <p className='text-gray-600 mb-2'>Введіть англійське слово:</p>
-                            <p className='text-4xl font-mono font-bold text-blue-600 tracking-wider mb-4'>
-                                {currentQuestion.maskedWord}
-                            </p>
-                            <p className='text-sm text-gray-500'>
-                                Підказка: {currentQuestion.word.en.length} літер
-                            </p>
-                        </div>
-
-                        <div className='space-y-4'>
-                            <input
-                                type='text'
-                                value={userInput}
-                                onChange={e => setUserInput(e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                placeholder='Введіть слово...'
-                                disabled={feedback.show}
-                                className='w-full px-4 py-3 text-xl text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100'
-                                autoFocus
-                            />
-
-                            <button
-                                onClick={checkAnswer}
-                                disabled={!userInput.trim() || feedback.show}
-                                className='w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center'
-                            >
-                                <CheckIcon className='w-5 h-5 mr-2' />
-                                Перевірити
-                            </button>
-                        </div>
-                        {feedback.show && (
-                            <div className={`mt-6 p-4 rounded-lg text-center ${
-                                feedback.isCorrect ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
-                            }`}>
-                                <div className='flex items-center justify-center mb-2'>
-                                    {feedback.isCorrect ? (
-                                        <CheckIcon className='w-6 h-6 mr-2' />
-                                    ) : (
-                                        <XMarkIcon className='w-6 h-6 mr-2' />
-                                    )}
-                                    <span className='font-semibold'>{feedback.message}</span>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                )}
+                {currentQuestion && <GameQuestion
+                    currentQuestion={currentQuestion}
+                    feedback={feedback}
+                    checkAnswer={checkAnswer}
+                    userInput={userInput}
+                    setUserInput={setUserInput}
+                />}
             </div>
         </div>
     );

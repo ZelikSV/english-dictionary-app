@@ -5,6 +5,9 @@ import bcrypt from 'bcrypt';
 import {sql} from '@/lib/db';
 import {log} from '@/lib/logger';
 
+const MAX_AGE_TOKEN = 5 * 24 * 60 * 60; // 5 days for JWT token
+const UPDATE_AGE_TOKEN = 24 * 60 * 60; // update every 24 hours
+
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
@@ -78,7 +81,12 @@ export const authOptions: NextAuthOptions = {
         }
     },
     session: {
-        strategy: 'jwt'
+        strategy: 'jwt',
+        maxAge: MAX_AGE_TOKEN,
+        updateAge: UPDATE_AGE_TOKEN
+    },
+    jwt: {
+        maxAge: MAX_AGE_TOKEN
     },
     pages: {
         signIn: '/login'

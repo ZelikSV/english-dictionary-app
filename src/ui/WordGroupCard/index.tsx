@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 
 import {IWordGroup} from '@/types';
-import {GET_WORDS_GROUPS_URL} from '@/lib/api';
+import {WORDS_GROUPS_API_URL} from '@/lib/api';
 import {log} from '@/lib/logger';
 import Spinner from '@/ui/Spinner';
 import {useSelectGroup} from '@/lib/hooks/useSelectGroup';
@@ -18,7 +18,7 @@ export const WordGroupCard = ({group}: { group: IWordGroup }) => {
     const handleDeleteGroup = async () => {
         setIsLoading(true);
         try {
-                const response = await fetch(`${GET_WORDS_GROUPS_URL}/${group.id}`, {
+                const response = await fetch(`${WORDS_GROUPS_API_URL}/${group.id}`, {
                     method: 'DELETE'
                 });
 

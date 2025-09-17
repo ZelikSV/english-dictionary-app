@@ -5,7 +5,7 @@ import {useRouter} from 'next/navigation';
 
 import {IWord, IWordGroupItem, NewWordInput, IWordGroup} from '@/types';
 import WordsList from '@/ui/WordsList';
-import {GET_WORDS_GROUPS_URL} from '@/lib/api';
+import {WORDS_GROUPS_API_URL} from '@/lib/api';
 
 interface EditWordsGroupFormProps {
     group: IWordGroup;
@@ -107,7 +107,7 @@ const EditWordsGroupForm = ({group}: EditWordsGroupFormProps) => {
             }
         };
 
-        await fetch(`${GET_WORDS_GROUPS_URL}/${group.id}`, {
+        await fetch(`${WORDS_GROUPS_API_URL}/${group.id}`, {
             method: 'PATCH',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload)

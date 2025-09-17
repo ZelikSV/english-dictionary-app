@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {GET_WORDS_GROUPS_URL} from '@/lib/api';
+import {WORDS_GROUPS_API_URL} from '@/lib/api';
 import {IWord, IWordGroup} from '@/types';
 import Cookies from 'js-cookie';
 import {log} from '@/lib/logger';
@@ -18,7 +18,7 @@ export const useGetWordsByGroupId = () => {
             setLoading(true);
 
             try {
-                const response = await fetch(`${GET_WORDS_GROUPS_URL}/${groupId}`);
+                const response = await fetch(`${WORDS_GROUPS_API_URL}/${groupId}`);
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch group');

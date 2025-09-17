@@ -6,7 +6,7 @@ import {useRouter} from 'next/navigation';
 
 import {IWord, IWordGroupItem, NewWordInput} from '@/types';
 import WordsList from '@/ui/WordsList';
-import {GET_WORDS_GROUPS_URL} from '@/lib/api';
+import {WORDS_GROUPS_API_URL} from '@/lib/api';
 import Spinner from '@/ui/Spinner';
 
 const NewWordsGroupForm = () => {
@@ -68,7 +68,7 @@ const NewWordsGroupForm = () => {
     const onSubmit = async (data: {groupName: string, words: IWord[]}) => {
         setIsLoading(true);
 
-        await fetch(`${GET_WORDS_GROUPS_URL}/new`, {
+        await fetch(`${WORDS_GROUPS_API_URL}/new`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

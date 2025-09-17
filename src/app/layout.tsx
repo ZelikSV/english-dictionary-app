@@ -31,7 +31,7 @@ const RootLayout = async ({
     <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthSessionProvider>
             <Header />
-            <main className='min-h-screen'>
+            <main className='pt-18 min-h-screen'>
                 {children}
             </main>
         </AuthSessionProvider>

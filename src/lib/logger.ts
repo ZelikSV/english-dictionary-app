@@ -28,8 +28,8 @@ class Logger {
 
     debug(message: string, data?: unknown, context?: string): void {
         if (!this.isDev) {
-return;
-}
+            return;
+        }
 
         const formatted = this.formatMessage(message, context);
         /* eslint-disable-next-line no-console */
@@ -38,8 +38,8 @@ return;
 
     info(message: string, data?: unknown, context?: string): void {
         if (!this.isDev) {
-return;
-}
+            return;
+        }
 
         const formatted = this.formatMessage(message, context);
         /* eslint-disable-next-line no-console */

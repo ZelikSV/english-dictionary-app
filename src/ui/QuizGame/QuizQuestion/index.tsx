@@ -60,9 +60,9 @@ export const QuizQuestion: React.FC<IQuizQuestionProps> = ({currentQuestion, fee
                                     disabled={feedback.show}
                                     className={buttonClass}
                                 >
-                    <span className='text-sm text-gray-500 block mb-1'>
-                      {String.fromCharCode(65 + index)}
-                    </span>
+                                <span className='text-sm text-gray-500 block mb-1'>
+                                  {String.fromCharCode(65 + index)}
+                                </span>
                                     {option}
                                 </button>
                             );
