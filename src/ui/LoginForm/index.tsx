@@ -55,7 +55,9 @@ const LoginForm = () => {
             setIsLoading(false);
 
             if (result?.ok) {
-                router.push('/');
+                setTimeout(() => {
+                    router.push('/');
+                }, 300);
             }
         }
     };
