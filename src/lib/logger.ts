@@ -27,10 +27,6 @@ class Logger {
     }
 
     debug(message: string, data?: unknown, context?: string): void {
-        if (!this.isDev) {
-            return;
-        }
-
         const formatted = this.formatMessage(message, context);
         /* eslint-disable-next-line no-console */
         console.log(`%c🐛 ${formatted}`, this.getStyle(LogLevel.debug), data || '');
