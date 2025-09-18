@@ -2,7 +2,6 @@
 import React, {useState} from 'react';
 import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
 import {signIn} from 'next-auth/react';
-import {useRouter} from 'next/navigation';
 import Spinner from '@/ui/Spinner';
 
 interface LoginFormData {
@@ -11,7 +10,6 @@ interface LoginFormData {
 }
 
 const LoginForm = () => {
-    const router = useRouter();
     const [formData, setFormData] = useState<LoginFormData>({
         email: '',
         password: ''
@@ -55,9 +53,7 @@ const LoginForm = () => {
             setIsLoading(false);
 
             if (result?.ok) {
-                setTimeout(() => {
-                    router.push('/');
-                }, 300);
+                window.location.href = '/';
             }
         }
     };
