@@ -1,5 +1,4 @@
 import {NextResponse, NextRequest} from 'next/server';
-import {log} from '@/lib/logger';
 
 export const middleware = (request: NextRequest) => {
     const {pathname} = request.nextUrl;
@@ -9,8 +8,6 @@ export const middleware = (request: NextRequest) => {
 
     const token = request.cookies.get('next-auth.session-token')?.value ||
         request.cookies.get('__Secure-next-auth.session-token')?.value;
-
-    log.debug('middleware', {token, isPublicPath, pathname});
 
     if (!token && !isPublicPath) {
         return NextResponse.redirect(new URL('/login', request.url));
