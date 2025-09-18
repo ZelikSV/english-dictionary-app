@@ -87,7 +87,6 @@ export const PATCH = async (
 
         const payload: UpdateWordsGroupPayload = await request.json();
 
-        // Добавляем id из URL к payload (если его нет)
         const updatePayload = {
             ...payload,
             id: groupId
