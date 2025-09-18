@@ -25,17 +25,13 @@ export const HeaderActions= () => {
     }
 
     return (
-                <div className='flex items-center space-x-2 bg-white/60 rounded-xl px-3 py-2 backdrop-blur-sm hover:cursor-pointer'>
+                <button onClick={handleSignOut} className='flex items-center space-x-2 bg-white/60 rounded-xl px-3 py-2 backdrop-blur-sm hover:cursor-pointer'>
                     <div className='w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-500 rounded-lg flex items-center justify-center'>
                         <span className='text-white font-medium text-sm'>{getUserNameIcon(session?.user?.name)}</span>
                     </div>
-                    <button
-                        onClick={handleSignOut}
-                        className='text-gray-600 hover:text-red-500 text-sm font-medium transition-colors cursor-pointer duration-200'
-                    >
+                    <p className='text-gray-600 hover:text-red-500 text-sm font-medium transition-colors cursor-pointer duration-200'>
                         Logout
-                    </button>
-                </div>
-
+                    </p>
+                </button>
     );
 };
