@@ -1,5 +1,5 @@
 import {NextResponse, NextRequest} from 'next/server';
-import {log} from "@/lib/logger";
+import {log} from '@/lib/logger';
 
 export const middleware = (request: NextRequest) => {
     const {pathname} = request.nextUrl;

@@ -4,7 +4,6 @@ import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/outline';
 import {signIn} from 'next-auth/react';
 import {useRouter} from 'next/navigation';
 import Spinner from '@/ui/Spinner';
-import {log} from '@/lib/logger';
 
 interface LoginFormData {
     email: string;
@@ -56,8 +55,6 @@ const LoginForm = () => {
             setIsLoading(false);
 
             if (result?.ok) {
-                log.debug('LOGIN FORM result?.ok', {result});
-
                 router.push('/');
             }
         }
