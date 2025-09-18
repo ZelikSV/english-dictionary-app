@@ -1,4 +1,4 @@
-'use server'
+'use server';
 
 import {IWordGroup, UpdateWordsGroupPayload} from '@/types';
 import {sql} from './db';
