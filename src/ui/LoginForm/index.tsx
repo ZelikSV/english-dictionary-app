@@ -44,8 +44,6 @@ const LoginForm = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        log.debug('LOGIN FORM result?.ok', {RULE: validateForm()});
-
         if (validateForm()) {
             setIsLoading(true);
 
@@ -54,8 +52,6 @@ const LoginForm = () => {
                 password: formData.password,
                 redirect: false
             });
-
-            log.debug('LOGIN FORM', {result});
 
             setIsLoading(false);
 
