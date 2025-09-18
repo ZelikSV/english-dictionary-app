@@ -1,3 +1,5 @@
+'use server'
+
 import {IWordGroup, UpdateWordsGroupPayload} from '@/types';
 import {sql} from './db';
 import {getCurrentUser} from '@/lib/session';
