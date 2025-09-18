@@ -46,20 +46,18 @@ const LoginForm = () => {
         if (validateForm()) {
             setIsLoading(true);
 
-        const result =  await signIn('credentials', {
+            const result = await signIn('credentials', {
                 email: formData.email,
                 password: formData.password,
                 redirect: false
             });
 
-            if (result?.ok) {
-                setIsLoading(false);
+            setIsLoading(false);
 
+            if (result?.ok) {
                 router.push('/');
             }
         }
-
-        setIsLoading(false);
     };
 
     const handleChange = (field: keyof LoginFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {

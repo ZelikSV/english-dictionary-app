@@ -122,7 +122,7 @@ const EditWordsGroupForm = ({group}: EditWordsGroupFormProps) => {
                 <div className='bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-100/50'>
                     <h1 className='text-2xl font-bold text-gray-800 mb-6'>Редагувати групу</h1>
 
-                    <div onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
+                    <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
                         <div>
                             <h3 className='text-lg font-medium text-gray-700 mb-3'>
                                 Імʼя групи
@@ -185,7 +185,7 @@ const EditWordsGroupForm = ({group}: EditWordsGroupFormProps) => {
                                 Зберегти зміни ({fields.length} слів)
                             </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
