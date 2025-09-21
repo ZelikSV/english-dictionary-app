@@ -14,6 +14,7 @@ export const WordGroupCard = ({group}: { group: IWordGroup }) => {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const {isSelectingGroup, handleSelectGroup} = useSelectGroup(group.id);
+    const wordsCount = group.words.length;
 
     const handleDeleteGroup = async () => {
         setIsLoading(true);
@@ -35,13 +36,13 @@ export const WordGroupCard = ({group}: { group: IWordGroup }) => {
     };
 
     return (
-        <div className='bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100/50'>
-            <div className='flex items-center justify-between mb-4'>
-                <div className='flex items-center space-x-3'>
-                    <div className='w-3 h-3 bg-gradient-to-r from-purple-400 to-purple-500 rounded-full'></div>
-                    <h3 className='font-semibold text-gray-800 text-lg'>{group.name}</h3>
+        <div className='bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100/50 flex flex-col h-80'>
+            <div className='flex items-center justify-between mb-4 min-h-[2rem]'>
+                <div className='flex items-center space-x-3 flex-1 min-w-0'>
+                    <div className='w-3 h-3 bg-gradient-to-r from-purple-400 to-purple-500 rounded-full flex-shrink-0'></div>
+                    <h3 className='font-semibold text-gray-800 text-lg truncate'>{group.name}</h3>
                 </div>
-                <div className='flex items-center space-x-2'>
+                <div className='flex items-center space-x-2 flex-shrink-0 ml-3'>
                     <Link
                         href={`/groups/${group.id}/edit`}
                         className='w-8 h-8 bg-gray-100 hover:bg-blue-50 rounded-lg flex items-center justify-center transition-colors group'
@@ -65,25 +66,27 @@ export const WordGroupCard = ({group}: { group: IWordGroup }) => {
             </div>
 
             <div className='bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-3 mb-4'>
-                <span className='text-2xl font-bold text-gray-800'>{group.words.length}</span>
+                <span className='text-2xl font-bold text-gray-800'>{wordsCount}</span>
                 <span className='text-gray-600 ml-2'>слів</span>
             </div>
 
-            <div className='flex flex-wrap gap-2 mb-4'>
-                {group.words.slice(0, 6).map((word, index) => (
-                    <span key={index} className='bg-gray-800 text-white px-3 py-1 rounded-full text-xs font-medium'>
-            {word.en}
-          </span>
-                ))}
-                {group.words.length > 6 && (
-                    <span className='bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-medium'>
-            +{group.words.length - 6} ще
-          </span>
-                )}
+            <div className='flex-1 flex flex-col'>
+                <div className='flex flex-wrap gap-2 mb-4 h-20 overflow-hidden'>
+                    {group.words.slice(0, 6).map((word, index) => (
+                        <span key={index} className='bg-gray-800 text-white px-3 py-1 rounded-full text-xs font-medium h-fit'>
+                    {word.en}
+                </span>
+                    ))}
+                    {wordsCount > 6 && (
+                        <span className='bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-medium h-fit'>
+                    +{wordsCount - 6} ще
+                </span>
+                    )}
+                </div>
             </div>
 
             <button
-                className='w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-3 rounded-xl font-medium hover:from-green-500 hover:to-green-600 transition-all duration-200 flex items-center justify-center space-x-2'
+                className='w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-3 rounded-xl font-medium hover:from-green-500 hover:to-green-600 transition-all duration-200 flex items-center justify-center space-x-2 mt-auto'
                 disabled={isSelectingGroup}
                 onClick={handleSelectGroup}
             >

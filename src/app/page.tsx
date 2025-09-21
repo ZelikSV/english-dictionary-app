@@ -1,9 +1,11 @@
 import Link from 'next/link';
+import {Suspense} from "react";
 
 import {WordGroupCard} from '@/ui/WordGroupCard';
 import {SearchGroups} from '@/ui/SearchGroups';
 import ActivityCards from '@/ui/ActivityCards';
 import {getWordsGroupByUserId} from '@/lib/actions';
+import {WordGroupCardsGridSkeleton} from "@/ui/WordGroupCard/WordGroupCardSkeleton";
 
 const Home = async ({searchParams}: { searchParams: { search?: string } }) => {
     const {search} = await searchParams;
@@ -25,11 +27,13 @@ const Home = async ({searchParams}: { searchParams: { search?: string } }) => {
                     </Link>
                 </div>
 
-                <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-20'>
-                    {wordGroups.map(group => (
-                        <WordGroupCard key={group.id} group={group} />
-                    ))}
-                </div>
+                    <Suspense fallback={<WordGroupCardsGridSkeleton />}>
+                        <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-20'>
+                                {wordGroups.map(group => (
+                                    <WordGroupCard key={group.id} group={group} />
+                                ))}
+                        </div>
+                    </Suspense>
                 <ActivityCards />
             </div>
         </div>
