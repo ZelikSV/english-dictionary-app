@@ -7,7 +7,7 @@ const GroupsEdit = async (props: { params: Promise<{ id: string }> })=> {
 
     const group = await getWordsGroupById(id);
 
-    if (!group.length) {
+    if (!group) {
         return null;
     }
 
@@ -20,7 +20,7 @@ const GroupsEdit = async (props: { params: Promise<{ id: string }> })=> {
                     active: true
                 }
             ]} showBackButton={false} />
-            <EditWordsGroupForm group={group[0]} />
+            <EditWordsGroupForm group={group} />
         </div>
     );
 };

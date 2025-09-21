@@ -15,10 +15,11 @@ export interface IWordGroup {
     userId: number;
 }
 
-export interface IDBWord {
-    en: string;
-    ua: string;
-    _id: string;
+export interface IDBWordGroup {
+    name: string;
+    id: string;
+    words: string;
+    userId: number;
 }
 
 export interface Activity {
@@ -40,19 +41,8 @@ export interface IWordGroupItem {
     id: string;
 }
 
-export interface IUserCredentials {
-    email: { label: string, type: string },
-    password: { label: string, type: string }
-}
-
-export interface UpdateOperations {
-    create: {en: string, ua: string}[];
-    update: {id: string, en: string, ua: string}[];
-    removeFromGroup: string[];
-}
-
 export interface UpdateWordsGroupPayload {
     id: string;
     name: string;
-    operations: UpdateOperations;
+    words: IWord[];
 }

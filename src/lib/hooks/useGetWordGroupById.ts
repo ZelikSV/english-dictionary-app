@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {WORDS_GROUPS_API_URL} from '@/lib/api';
-import {IWord, IWordGroup} from '@/types';
+import {IWord} from '@/types';
 import Cookies from 'js-cookie';
 import {log} from '@/lib/logger';
 
@@ -26,9 +26,7 @@ export const useGetWordsByGroupId = () => {
 
                 const data = await response.json();
 
-                const wordsList = data.group.flatMap((el: IWordGroup) => el.words);
-
-                setWords( wordsList);
+                setWords( data.group.words);
             } catch (err) {
                 log.error(`Failed GET Words Groups by id: ${groupId}`,err);
             } finally {

@@ -76,35 +76,10 @@ const EditWordsGroupForm = ({group}: EditWordsGroupFormProps) => {
     };
 
     const onSubmit = async (formData: {groupName: string, words: IWord[]}) => {
-        const originalWords = group.words || [];
-        const newWords = formData.words.filter(word => !word.id);
-        const updatedWords = formData.words.filter(word => {
-            if (!word.id) {
-                return false;
-            }
-
-            const originalWord = originalWords.find(orig => orig.id === word.id);
-
-            return originalWord && (
-                originalWord.en !== word.en ||
-                originalWord.ua !== word.ua
-            );
-        });
-
-        const removedFromGroupIds = originalWords
-            .filter(originalWord =>
-                !formData.words.find(word => word.id === originalWord.id)
-            )
-            .map(word => word.id);
-
         const payload = {
             id: group.id,
             name: formData.groupName,
-            operations: {
-                create: newWords.map(word => ({en: word.en, ua: word.ua})),
-                update: updatedWords.map(word => ({id: word.id, en: word.en, ua: word.ua})),
-                removeFromGroup: removedFromGroupIds
-            }
+            words: formData.words
         };
 
         await fetch(`${WORDS_GROUPS_API_URL}/${group.id}`, {

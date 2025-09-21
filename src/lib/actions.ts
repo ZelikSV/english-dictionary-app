@@ -1,30 +1,25 @@
 'use server';
 
-import {IWordGroup, UpdateWordsGroupPayload} from '@/types';
-import {sql} from './db';
+import {IDBWordGroup, IWord, IWordGroup, UpdateWordsGroupPayload} from '@/types';
 import {getCurrentUser} from '@/lib/session';
 import {log} from '@/lib/logger';
+import {sql} from './db';
 
 export const createWordsGroup = async (wordsGroup: IWordGroup) => {
     try {
-        await sql.begin(async trx => {
-            const insertedWords = await Promise.all(
-                wordsGroup.words.map(async word => {
-                    const result = await trx`
-                        INSERT INTO words (en, ua)
-                        VALUES (${word.en}, ${word.ua})
-                        RETURNING id
-                    `;
+        const user = await getCurrentUser();
 
-                    return result[0].id;
-                })
-            );
+        await sql`
+            INSERT INTO words_groups (id, name, user_id, words)
+            VALUES (
+                ${wordsGroup.id}, 
+                ${wordsGroup.name}, 
+                ${user?.id ?? wordsGroup.userId}, 
+                ${JSON.stringify(wordsGroup.words)}
+            )
+        `;
 
-            await trx`
-                INSERT INTO words_groups (id, name, user_id, words)
-                VALUES (${wordsGroup.id}, ${wordsGroup.name}, ${wordsGroup.userId}, ${insertedWords})
-            `;
-        });
+        log.info(`✅ Words group "${wordsGroup.name}" created with ${wordsGroup.words.length} words`);
     } catch (error) {
         log.error('createWordsGroup', error);
         throw error;
@@ -35,62 +30,70 @@ export const getWordsGroupByUserId = async (search: string = ''): Promise<IWordG
     try {
         const user = await getCurrentUser();
 
-        const groups = await sql<IWordGroup[]>`
-    SELECT 
-        wg.id, 
-        wg.name, 
-        wg.user_id,
-        COALESCE(
-            JSON_AGG(
-                JSON_BUILD_OBJECT('id', w.id, 'en', w.en, 'ua', w.ua)
-            ) FILTER (WHERE w.id IS NOT NULL), 
-            '[]'::json
-        ) as words
-    FROM words_groups wg
-    LEFT JOIN words w ON w.id = ANY(wg.words)
-    WHERE wg.user_id = ${user?.id ?? 0}
-    ${search ? sql`AND LOWER(wg.name) LIKE ${`%${search.toLowerCase()}%`}` : sql``}
-    GROUP BY wg.id, wg.name, wg.user_id
-    ORDER BY wg.name
-`;
+        const groups = await sql<IDBWordGroup[]>`
+            SELECT 
+                wg.id, 
+                wg.name, 
+                wg.user_id,
+                wg.words,
+                wg.created_at,
+                wg.updated_at
+            FROM words_groups wg
+            WHERE wg.user_id = ${user?.id ?? 0}
+            ${search ? sql`AND LOWER(wg.name) LIKE ${`%${search.toLowerCase()}%`}` : sql``}
+            ORDER BY wg.created_at
+        `;
 
         if (groups.length === 0) {
             return [];
         }
 
-        return groups;
+        return groups.map(group => ({
+            ...group,
+            words: JSON.parse(group.words ?? '[]')
+        }));
     } catch (error) {
         log.error('getWordsGroupByUserId', error);
         throw error;
     }
 };
 
-export const getWordsGroupById = async (id: string): Promise<IWordGroup[]> => {
+export const getWordsGroupById = async (id: string): Promise<IWordGroup | null> => {
     try {
         const user = await getCurrentUser();
 
-        const groups = await sql<IWordGroup[]>`
-    SELECT 
-        wg.id, 
-        wg.name, 
-        wg.user_id,
-        COALESCE(
-            JSON_AGG(
-                JSON_BUILD_OBJECT('id', w.id, 'en', w.en, 'ua', w.ua)
-            ) FILTER (WHERE w.id IS NOT NULL), 
-            '[]'::json
-        ) as words
-    FROM words_groups wg
-    LEFT JOIN words w ON w.id = ANY(wg.words)
-    WHERE wg.user_id = ${user?.id ?? 0} AND wg.id = ${id}
-    GROUP BY wg.id, wg.name, wg.user_id
-`;
+        const groups = await sql<IDBWordGroup[]>`
+            SELECT 
+                wg.id, 
+                wg.name, 
+                wg.user_id,
+                wg.words,
+                wg.created_at,
+                wg.updated_at
+            FROM words_groups wg
+            WHERE wg.user_id = ${user?.id ?? 0} AND wg.id = ${id}
+        `;
 
         if (groups.length === 0) {
-            return [];
+            return null;
         }
 
-        return groups;
+        const group = groups[0];
+
+        let parsedWords: IWord[];
+
+        try {
+            parsedWords = JSON.parse(group.words ?? '[]');
+        } catch (parseError) {
+            log.warn(`Failed to parse words for group ${group.id}:`, parseError);
+
+            parsedWords = [];
+        }
+
+        return {
+            ...group,
+            words: parsedWords
+        };
     } catch (error) {
         log.error('getWordsGroupById', error);
         throw error;
@@ -109,70 +112,13 @@ export const deleteWordsGroup = async (groupId: string) => {
 export const updateWordsGroup = async (payload: UpdateWordsGroupPayload) => {
     try {
         await sql.begin(async trx => {
-            const {operations, name, id} = payload;
-            const currentGroupResult = await trx`
-                SELECT words FROM words_groups WHERE id = ${id}
-            `;
-            let currentWordIds = (currentGroupResult[0]?.words as string[]) || [];
-
-            if (operations.create.length > 0) {
-                const newWordIds = await Promise.all(
-                    operations.create.map(async word => {
-                        const result = await trx`
-                            INSERT INTO words (en, ua)
-                            VALUES (${word.en}, ${word.ua})
-                            RETURNING id
-                        `;
-
-                        return result[0].id as string;
-                    })
-                );
-                currentWordIds = [...currentWordIds, ...newWordIds];
-            }
-
-            if (operations.update.length > 0) {
-                await Promise.all(
-                    operations.update.map(word =>
-                        trx`
-                            UPDATE words 
-                            SET en = ${word.en}, ua = ${word.ua}
-                            WHERE id = ${word.id}
-                        `
-                    )
-                );
-            }
-
-            if (operations.removeFromGroup.length > 0) {
-                currentWordIds = currentWordIds.filter(wordId =>
-                    !operations.removeFromGroup.includes(wordId)
-                );
-
-                const unusedWordsResult = await trx`
-                    SELECT w.id 
-                    FROM words w
-                    WHERE w.id = ANY(${operations.removeFromGroup})
-                    AND NOT EXISTS (
-                        SELECT 1 FROM words_groups wg 
-                        WHERE wg.id != ${id} 
-                        AND w.id = ANY(wg.words)
-                    )
-                `;
-
-                const unusedWordIds = unusedWordsResult.map(row => row.id as string);
-
-                if (unusedWordIds.length > 0) {
-                    await trx`
-                        DELETE FROM words 
-                        WHERE id = ANY(${unusedWordIds})
-                    `;
-                }
-            }
+            const {words, name, id} = payload;
 
             await trx`
-                UPDATE words_groups 
-                SET 
+                UPDATE words_groups
+                SET
                     name = ${name},
-                    words = ${currentWordIds},
+                    words = ${JSON.stringify(words)},
                     updated_at = NOW()
                 WHERE id = ${id}
             `;
