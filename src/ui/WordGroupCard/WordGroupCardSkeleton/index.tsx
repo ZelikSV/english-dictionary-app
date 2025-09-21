@@ -21,11 +21,11 @@ const WordGroupCardSkeleton = () => {
 
             <div className='flex-1 flex flex-col'>
                 <div className='flex flex-wrap gap-2 mb-4 h-20 overflow-hidden'>
-                    {Array.from({ length: Math.floor(Math.random() * 4) + 3 }).map((_, index) => (
+                    {Array.from({length: Math.floor(Math.random() * 4) + 3}).map((_, index) => (
                         <div
                             key={index}
                             className='bg-gray-300 rounded-full h-6 h-fit'
-                            style={{ width: `${Math.floor(Math.random() * 60) + 40}px` }}
+                            style={{width: `${Math.floor(Math.random() * 60) + 40}px`}}
                         ></div>
                     ))}
                     <div className='bg-gray-250 rounded-full h-6 w-12 h-fit'></div>
@@ -37,14 +37,14 @@ const WordGroupCardSkeleton = () => {
     );
 };
 
-const WordGroupCardsGridSkeleton = ({ count = 3 }) => {
+const WordGroupCardsGridSkeleton = ({count = 3}) => {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: count }).map((_, index) => (
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+            {Array.from({length: count}).map((_, index) => (
                 <WordGroupCardSkeleton key={index} />
             ))}
         </div>
     );
 };
 
-export { WordGroupCardSkeleton, WordGroupCardsGridSkeleton };
+export {WordGroupCardSkeleton, WordGroupCardsGridSkeleton};

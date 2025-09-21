@@ -1,11 +1,11 @@
 import Link from 'next/link';
-import {Suspense} from "react";
+import {Suspense} from 'react';
 
 import {WordGroupCard} from '@/ui/WordGroupCard';
 import {SearchGroups} from '@/ui/SearchGroups';
 import ActivityCards from '@/ui/ActivityCards';
 import {getWordsGroupByUserId} from '@/lib/actions';
-import {WordGroupCardsGridSkeleton} from "@/ui/WordGroupCard/WordGroupCardSkeleton";
+import {WordGroupCardsGridSkeleton} from '@/ui/WordGroupCard/WordGroupCardSkeleton';
 
 const Home = async ({searchParams}: { searchParams: { search?: string } }) => {
     const {search} = await searchParams;
