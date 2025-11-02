@@ -10,7 +10,7 @@
     "lint:fix": "eslint --fix",
     "type-check": "tsc --noEmit",
     "test": "echo \"No tests specified\" && exit 0",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -44,16 +44,15 @@
     "eslint-config-next": "16.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.6",
+    "prettier": "^3.6.2",
     "typescript": "^5.9.3"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "git add"
+      "prettier --write"
     ],
     "*.{json,md,css}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   }
 }

@@ -1,0 +1,10 @@
+# Run tests before push
+npm test
+
+# Final build check before push
+npm run build
+
+# Type check
+npm run type-check
+
+echo "✅ Pre-push checks passed!"
