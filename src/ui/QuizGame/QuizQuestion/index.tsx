@@ -56,7 +56,7 @@ export const QuizQuestion: React.FC<IQuizQuestionProps> = ({currentQuestion, fee
                             return (
                                 <button
                                     key={index}
-                                    onClick={() => handleAnswerSelect(option)}
+                                    onClick={handleAnswerSelect(option)}
                                     disabled={feedback.show}
                                     className={buttonClass}
                                 >
