@@ -1,0 +1,77 @@
+import React from 'react';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
+
+interface GameHeaderProps {
+  currentRound: number;
+  gameLanguage: 'en' | 'ua';
+  totalFlipped: number;
+  onLanguageChange: (language: 'en' | 'ua') => void;
+}
+
+export const GameHeader: React.FC<GameHeaderProps> = ({
+  currentRound,
+  gameLanguage,
+  totalFlipped,
+  onLanguageChange,
+}) => {
+  const router = useRouter();
+
+  const getLanguageText = (language: 'en' | 'ua') => {
+    return language === 'en'
+      ? '🇬🇧 English → Українська'
+      : '🇺🇦 Українська → English';
+  };
+
+  return (
+    <div className="flex items-center justify-between mb-8">
+      <button
+        onClick={() => router.push('/')}
+        className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+      >
+        <ArrowLeftIcon className="w-5 h-5 mr-2" />
+        На головну
+      </button>
+
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-gray-800">Навчальні картки</h1>
+        <p className="text-gray-600">Раунд #{currentRound}</p>
+        <p
+          className={`text-sm font-medium ${
+            gameLanguage === 'en' ? 'text-blue-600' : 'text-yellow-600'
+          }`}
+        >
+          {getLanguageText(gameLanguage)}
+        </p>
+      </div>
+
+      <div className="text-right">
+        <p className="text-sm text-gray-600 mb-2">
+          Всього перевернуто: {totalFlipped}
+        </p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => onLanguageChange('en')}
+            className={`px-3 py-1 rounded text-sm transition-colors ${
+              gameLanguage === 'en'
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+            }`}
+          >
+            🇬🇧 EN
+          </button>
+          <button
+            onClick={() => onLanguageChange('ua')}
+            className={`px-3 py-1 rounded text-sm transition-colors ${
+              gameLanguage === 'ua'
+                ? 'bg-yellow-500 text-white'
+                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+            }`}
+          >
+            🇺🇦 UA
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
