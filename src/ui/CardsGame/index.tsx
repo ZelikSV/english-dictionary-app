@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { IWord } from '@/types';
 import { useGetWordsByGroupId } from '@/lib/hooks/useGetWordGroupById';
 import { Loading } from '@/ui/Loading';
 import { useCardsGame } from './hooks/useCardsGame';
@@ -14,7 +13,6 @@ import { ProgressIndicator } from './components/ProgressIndicator';
 
 const CardsGame = () => {
   const router = useRouter();
-  const [words, setWords] = useState<IWord[]>([]);
   const { wordsByGroups, loading } = useGetWordsByGroupId();
 
   const {
@@ -29,7 +27,7 @@ const CardsGame = () => {
     nextRound,
     changeLanguage,
     startNewRound,
-  } = useCardsGame(words);
+  } = useCardsGame(wordsByGroups);
 
   useEffect(() => {
     if (!loading) {
@@ -39,12 +37,11 @@ const CardsGame = () => {
         return;
       }
 
-      setWords(wordsByGroups);
-      initializeGame('en');
+      initializeGame();
     }
   }, [loading, wordsByGroups.length, CARDS_PER_ROUND, initializeGame, router]);
 
-  if (words.length === 0 || !gameStarted) {
+  if (wordsByGroups.length === 0 || !gameStarted) {
     return <Loading />;
   }
 
