@@ -32,6 +32,7 @@ const CardsGame = () => {
       if (wordsByGroups?.length < CARDS_PER_ROUND) {
         alert(`Потрібно мінімум ${CARDS_PER_ROUND} слів для вивчення карток!`);
         router.push('/');
+
         return;
       }
 

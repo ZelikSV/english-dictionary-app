@@ -2,11 +2,9 @@ import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 // Global state to track the selected group across all components
-let globalSelectedGroupId: string | null = null;
 let globalListeners: ((selectedId: string | null) => void)[] = [];
 
 const notifyListeners = (selectedId: string | null) => {
-  globalSelectedGroupId = selectedId;
   globalListeners.forEach(listener => listener(selectedId));
 };
 
@@ -17,7 +15,7 @@ export const useSelectGroup = (groupId: string) => {
   useEffect(() => {
     // Initialize from cookie
     const selectedGroupId = Cookies.get('group') || null;
-    globalSelectedGroupId = selectedGroupId;
+
     setIsSelected(selectedGroupId === groupId);
 
     // Listen for global changes

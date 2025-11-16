@@ -1,16 +1,9 @@
-import {dirname} from 'path';
-import {fileURLToPath} from 'url';
-import {FlatCompat} from '@eslint/eslintrc';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-    baseDirectory: __dirname
-});
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import typescriptParser from '@typescript-eslint/parser';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
 
 const eslintConfig = [
-    ...compat.extends('next/core-web-vitals', 'next/typescript'),
     {
         ignores: [
             'node_modules/**',
@@ -21,12 +14,38 @@ const eslintConfig = [
         ]
     },
     {
+        files: ['**/*.{js,jsx,ts,tsx}'],
+        languageOptions: {
+            parser: typescriptParser,
+            parserOptions: {
+                ecmaVersion: 'latest',
+                sourceType: 'module',
+                ecmaFeatures: {
+                    jsx: true
+                }
+            }
+        },
+        plugins: {
+            '@typescript-eslint': typescriptEslint,
+            react,
+            'react-hooks': reactHooks
+        },
+        settings: {
+            react: {
+                version: 'detect'
+            }
+        },
         rules: {
+            ...react.configs.recommended.rules,
+            ...reactHooks.configs.recommended.rules,
+            'react/react-in-jsx-scope': 'off',
+            'react/prop-types': 'off',
             semi: ['error', 'always'],
             quotes: ['error', 'single', {
                 avoidEscape: true,
                 allowTemplateLiterals: true
             }],
+            'react-hooks/set-state-in-effect': 'off',
             'jsx-quotes': ['error', 'prefer-single'],
             'comma-dangle': 'error',
             'eol-last': 'error',

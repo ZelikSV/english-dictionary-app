@@ -19,6 +19,8 @@ export interface RoundStats {
 }
 
 export const CARDS_PER_ROUND = 4;
+const languages = Object.values(Lang);
+const languageIndex = Math.floor(Math.random() * languages.length);
 
 export const useCardsGame = (words: IWord[]) => {
   const [currentCards, setCurrentCards] = useState<Card[]>([]);
@@ -29,12 +31,7 @@ export const useCardsGame = (words: IWord[]) => {
   });
   const [gameStarted, setGameStarted] = useState(false);
   const [allCardsFlipped, setAllCardsFlipped] = useState(false);
-  const gameLanguage = useMemo(() => {
-    const languages = [Lang.EN, Lang.UA];
-    const index = Math.floor(Math.random() * languages.length);
-
-    return languages[index] ?? Lang.EN;
-  }, []);
+  const gameLanguage = useMemo(() => languages[languageIndex] ?? Lang.EN, []);
 
   const createCards = useCallback(
     (gameWords: IWord[], language: Lang): Card[] => {
@@ -60,7 +57,7 @@ export const useCardsGame = (words: IWord[]) => {
     const newCards = createCards(words, gameLanguage);
 
     setCurrentCards(newCards);
-  }, [words, gameLanguage]);
+  }, [words, gameLanguage, createCards]);
 
   const startNewRound = () => {
     const newCards = createCards(words, gameLanguage);
@@ -76,8 +73,10 @@ export const useCardsGame = (words: IWord[]) => {
             ...prev,
             totalFlipped: prev.totalFlipped + 1,
           }));
+
           return { ...card, isFlipped: true };
         }
+
         return card;
       });
 
