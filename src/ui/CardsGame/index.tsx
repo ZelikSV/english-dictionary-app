@@ -24,7 +24,6 @@ const CardsGame = () => {
     initializeGame,
     flipCard,
     nextRound,
-    changeLanguage,
     startNewRound,
   } = useCardsGame(wordsByGroups);
 
@@ -51,7 +50,6 @@ const CardsGame = () => {
           currentRound={roundStats.currentRound}
           gameLanguage={gameLanguage}
           totalFlipped={roundStats.totalFlipped}
-          onLanguageChange={changeLanguage}
         />
 
         <GameProgress

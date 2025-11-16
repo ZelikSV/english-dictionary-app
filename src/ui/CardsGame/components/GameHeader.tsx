@@ -8,14 +8,12 @@ interface GameHeaderProps {
   currentRound: number;
   gameLanguage: Lang;
   totalFlipped: number;
-  onLanguageChange: (language: Lang) => void;
 }
 
 export const GameHeader: React.FC<GameHeaderProps> = ({
   currentRound,
   gameLanguage,
   totalFlipped,
-  onLanguageChange,
 }) => {
   const router = useRouter();
 
@@ -47,28 +45,6 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
         <p className="text-sm text-gray-600 mb-2">
           Всього перевернуто: {totalFlipped}
         </p>
-        <div className="flex gap-2">
-          <button
-            onClick={() => onLanguageChange(Lang.EN)}
-            className={`px-3 py-1 rounded text-sm transition-colors ${
-              gameLanguage === Lang.EN
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
-            }`}
-          >
-            🇬🇧 EN
-          </button>
-          <button
-            onClick={() => onLanguageChange(Lang.UA)}
-            className={`px-3 py-1 rounded text-sm transition-colors ${
-              gameLanguage === Lang.EN
-                ? 'bg-yellow-500 text-white'
-                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
-            }`}
-          >
-            🇺🇦 UA
-          </button>
-        </div>
       </div>
     </div>
   );

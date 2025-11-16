@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { IWord } from '@/types';
 
 import { Lang } from '@/lib/constants';
@@ -27,9 +27,14 @@ export const useCardsGame = (words: IWord[]) => {
     totalFlipped: 0,
     cardsPerRound: CARDS_PER_ROUND,
   });
-  const [gameLanguage, setGameLanguage] = useState<Lang>(Lang.EN);
   const [gameStarted, setGameStarted] = useState(false);
   const [allCardsFlipped, setAllCardsFlipped] = useState(false);
+  const gameLanguage = useMemo(() => {
+    const languages = [Lang.EN, Lang.UA];
+    const index = Math.floor(Math.random() * languages.length);
+
+    return languages[index] ?? Lang.EN;
+  }, []);
 
   const createCards = useCallback(
     (gameWords: IWord[], language: Lang): Card[] => {
@@ -49,16 +54,13 @@ export const useCardsGame = (words: IWord[]) => {
     []
   );
 
-  const initializeGame = useCallback(
-    (selectedLanguage: Lang = Lang.EN) => {
-      setGameStarted(true);
+  const initializeGame = useCallback(() => {
+    setGameStarted(true);
 
-      const newCards = createCards(words, selectedLanguage);
+    const newCards = createCards(words, gameLanguage);
 
-      setCurrentCards(newCards);
-    },
-    [words]
-  );
+    setCurrentCards(newCards);
+  }, [words, gameLanguage]);
 
   const startNewRound = () => {
     const newCards = createCards(words, gameLanguage);
@@ -98,26 +100,6 @@ export const useCardsGame = (words: IWord[]) => {
     startNewRound();
   };
 
-  const changeLanguage = useCallback(
-    (newLanguage: Lang) => {
-      setGameLanguage(newLanguage);
-
-      const isEnglish = newLanguage === Lang.EN;
-      const updatedCards = currentCards.map(card => ({
-        ...card,
-        frontText: isEnglish ? card.word.en : card.word.ua,
-        backText: isEnglish ? card.word.ua : card.word.en,
-        frontLanguage: newLanguage,
-        isFlipped: false,
-      }));
-
-      setCurrentCards(updatedCards);
-
-      setAllCardsFlipped(false);
-    },
-    [currentCards, setAllCardsFlipped, setCurrentCards]
-  );
-
   return {
     currentCards,
     roundStats,
@@ -127,7 +109,6 @@ export const useCardsGame = (words: IWord[]) => {
     initializeGame,
     flipCard,
     nextRound,
-    changeLanguage,
     startNewRound,
   };
 };
