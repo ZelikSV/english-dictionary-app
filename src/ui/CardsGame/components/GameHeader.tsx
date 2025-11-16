@@ -19,12 +19,6 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
 }) => {
   const router = useRouter();
 
-  const getLanguageText = (language: Lang) => {
-    return language === Lang.EN
-      ? '🇬🇧 English → Українська'
-      : '🇺🇦 Українська → English';
-  };
-
   return (
     <div className="flex items-center justify-between mb-8">
       <button
@@ -43,7 +37,9 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
             gameLanguage === Lang.EN ? 'text-blue-600' : 'text-yellow-600'
           }`}
         >
-          {getLanguageText(gameLanguage)}
+          {gameLanguage === Lang.EN
+            ? '🇬🇧 English → Українська'
+            : '🇺🇦 Українська → English'}
         </p>
       </div>
 

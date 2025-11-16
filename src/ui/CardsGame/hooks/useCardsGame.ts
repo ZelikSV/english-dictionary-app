@@ -18,7 +18,7 @@ export interface RoundStats {
   cardsPerRound: number;
 }
 
-const CARDS_PER_ROUND = 4;
+export const CARDS_PER_ROUND = 4;
 
 export const useCardsGame = (words: IWord[]) => {
   const [currentCards, setCurrentCards] = useState<Card[]>([]);
@@ -56,8 +56,6 @@ export const useCardsGame = (words: IWord[]) => {
       const newCards = createCards(words, selectedLanguage);
 
       setCurrentCards(newCards);
-
-      setAllCardsFlipped(false);
     },
     [words]
   );
@@ -126,7 +124,6 @@ export const useCardsGame = (words: IWord[]) => {
     gameLanguage,
     gameStarted,
     allCardsFlipped,
-    CARDS_PER_ROUND,
     initializeGame,
     flipCard,
     nextRound,

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useGetWordsByGroupId } from '@/lib/hooks/useGetWordGroupById';
 import { Loading } from '@/ui/Loading';
-import { useCardsGame } from './hooks/useCardsGame';
+import { CARDS_PER_ROUND, useCardsGame } from './hooks/useCardsGame';
 import { GameHeader } from './components/GameHeader';
 import { GameProgress } from './components/GameProgress';
 import { GameCard } from './components/GameCard';
@@ -21,7 +21,6 @@ const CardsGame = () => {
     gameLanguage,
     gameStarted,
     allCardsFlipped,
-    CARDS_PER_ROUND,
     initializeGame,
     flipCard,
     nextRound,
@@ -39,7 +38,7 @@ const CardsGame = () => {
 
       initializeGame();
     }
-  }, [loading, wordsByGroups.length, CARDS_PER_ROUND, initializeGame, router]);
+  }, [loading, wordsByGroups.length, initializeGame, router]);
 
   if (wordsByGroups.length === 0 || !gameStarted) {
     return <Loading />;
