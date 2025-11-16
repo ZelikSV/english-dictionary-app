@@ -1,6 +1,7 @@
 import React from 'react';
 import { Feedback } from '@/ui/QuizGame/Feedback';
 import { IAnswerFeedback, IQuizQuestion } from '@/ui/QuizGame';
+import { Lang } from '@/lib/constants';
 
 interface QuizQuestionProps {
   currentQuestion: IQuizQuestion;
@@ -14,7 +15,7 @@ interface LanguageBadgeProps {
 }
 
 const LanguageBadge: React.FC<LanguageBadgeProps> = ({ language }) => {
-  const isEnglish = language === 'en';
+  const isEnglish = language === Lang.EN;
   const badgeStyles = isEnglish
     ? 'bg-blue-100 text-blue-800'
     : 'bg-yellow-100 text-yellow-800';
@@ -58,7 +59,7 @@ const getOptionButtonStyles = (
 };
 
 const getQuestionPrompt = (language: string): string => {
-  return language === 'en'
+  return language === Lang.EN
     ? 'Оберіть переклад слова:'
     : 'Оберіть англійський переклад:';
 };

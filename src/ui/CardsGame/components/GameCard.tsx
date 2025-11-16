@@ -1,6 +1,7 @@
 import React from 'react';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { Card } from '../hooks/useCardsGame';
+import { Lang } from '@/lib/constants';
 
 interface GameCardProps {
   card: Card;
@@ -8,12 +9,12 @@ interface GameCardProps {
 }
 
 export const GameCard: React.FC<GameCardProps> = ({ card, onFlip }) => {
-  const getFrontLanguageLabel = (language: 'en' | 'ua') => {
-    return language === 'en' ? '🇬🇧 English' : '🇺🇦 Українська';
+  const getFrontLanguageLabel = (language: Lang) => {
+    return language === Lang.EN ? '🇬🇧 English' : '🇺🇦 Українська';
   };
 
-  const getBackLanguageLabel = (language: 'en' | 'ua') => {
-    return language === 'en' ? '🇺🇦 Переклад' : '🇬🇧 Translation';
+  const getBackLanguageLabel = (language: Lang) => {
+    return language === Lang.EN ? '🇺🇦 Переклад' : '🇬🇧 Translation';
   };
 
   return (

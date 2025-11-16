@@ -1,12 +1,14 @@
 import { useState, useCallback } from 'react';
 import { IWord } from '@/types';
 
+import { Lang } from '@/lib/constants';
+
 export interface Card {
   id: string;
   word: IWord;
   frontText: string;
   backText: string;
-  frontLanguage: 'en' | 'ua';
+  frontLanguage: Lang;
   isFlipped: boolean;
 }
 
@@ -25,20 +27,21 @@ export const useCardsGame = (words: IWord[]) => {
     totalFlipped: 0,
     cardsPerRound: CARDS_PER_ROUND,
   });
-  const [gameLanguage, setGameLanguage] = useState<'en' | 'ua'>('en');
+  const [gameLanguage, setGameLanguage] = useState<Lang>(Lang.EN);
   const [gameStarted, setGameStarted] = useState(false);
   const [allCardsFlipped, setAllCardsFlipped] = useState(false);
 
   const createCards = useCallback(
-    (gameWords: IWord[], language: 'en' | 'ua'): Card[] => {
+    (gameWords: IWord[], language: Lang): Card[] => {
       const shuffledWords = [...gameWords].sort(() => Math.random() - 0.5);
       const selectedWords = shuffledWords.slice(0, CARDS_PER_ROUND);
+      const isEnglish = language === Lang.EN;
 
       return selectedWords.map(word => ({
         id: word.id,
         word,
-        frontText: language === 'en' ? word.en : word.ua,
-        backText: language === 'en' ? word.ua : word.en,
+        frontText: isEnglish ? word.en : word.ua,
+        backText: isEnglish ? word.ua : word.en,
         frontLanguage: language,
         isFlipped: false,
       }));
@@ -47,7 +50,7 @@ export const useCardsGame = (words: IWord[]) => {
   );
 
   const initializeGame = useCallback(
-    (selectedLanguage: 'en' | 'ua' = 'en') => {
+    (selectedLanguage: Lang = Lang.EN) => {
       setGameStarted(true);
 
       const newCards = createCards(words, selectedLanguage);
@@ -98,13 +101,14 @@ export const useCardsGame = (words: IWord[]) => {
   };
 
   const changeLanguage = useCallback(
-    (newLanguage: 'en' | 'ua') => {
+    (newLanguage: Lang) => {
       setGameLanguage(newLanguage);
 
+      const isEnglish = newLanguage === Lang.EN;
       const updatedCards = currentCards.map(card => ({
         ...card,
-        frontText: newLanguage === 'en' ? card.word.en : card.word.ua,
-        backText: newLanguage === 'en' ? card.word.ua : card.word.en,
+        frontText: isEnglish ? card.word.en : card.word.ua,
+        backText: isEnglish ? card.word.ua : card.word.en,
         frontLanguage: newLanguage,
         isFlipped: false,
       }));

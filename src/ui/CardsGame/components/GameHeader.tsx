@@ -2,11 +2,13 @@ import React from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 
+import { Lang } from '@/lib/constants';
+
 interface GameHeaderProps {
   currentRound: number;
-  gameLanguage: 'en' | 'ua';
+  gameLanguage: Lang;
   totalFlipped: number;
-  onLanguageChange: (language: 'en' | 'ua') => void;
+  onLanguageChange: (language: Lang) => void;
 }
 
 export const GameHeader: React.FC<GameHeaderProps> = ({
@@ -17,8 +19,8 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
 }) => {
   const router = useRouter();
 
-  const getLanguageText = (language: 'en' | 'ua') => {
-    return language === 'en'
+  const getLanguageText = (language: Lang) => {
+    return language === Lang.EN
       ? '🇬🇧 English → Українська'
       : '🇺🇦 Українська → English';
   };
@@ -38,7 +40,7 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
         <p className="text-gray-600">Раунд #{currentRound}</p>
         <p
           className={`text-sm font-medium ${
-            gameLanguage === 'en' ? 'text-blue-600' : 'text-yellow-600'
+            gameLanguage === Lang.EN ? 'text-blue-600' : 'text-yellow-600'
           }`}
         >
           {getLanguageText(gameLanguage)}
@@ -51,9 +53,9 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
         </p>
         <div className="flex gap-2">
           <button
-            onClick={() => onLanguageChange('en')}
+            onClick={() => onLanguageChange(Lang.EN)}
             className={`px-3 py-1 rounded text-sm transition-colors ${
-              gameLanguage === 'en'
+              gameLanguage === Lang.EN
                 ? 'bg-blue-500 text-white'
                 : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
             }`}
@@ -61,9 +63,9 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
             🇬🇧 EN
           </button>
           <button
-            onClick={() => onLanguageChange('ua')}
+            onClick={() => onLanguageChange(Lang.UA)}
             className={`px-3 py-1 rounded text-sm transition-colors ${
-              gameLanguage === 'ua'
+              gameLanguage === Lang.EN
                 ? 'bg-yellow-500 text-white'
                 : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
             }`}
