@@ -243,7 +243,7 @@ const QuizGame = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 p-4">
+    <div className="min-h-[94vh] bg-gradient-to-br from-green-50 to-emerald-100 p-4">
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <button
@@ -266,9 +266,6 @@ const QuizGame = () => {
               <ClockIcon className="w-4 h-4 mr-1" />
               {timeLeft}с
             </div>
-            <p className="text-sm text-gray-600">
-              ✅ {quizStats.correct} | ❌ {quizStats.incorrect}
-            </p>
           </div>
         </div>
 
