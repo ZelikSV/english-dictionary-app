@@ -1,41 +1,41 @@
-import type {Metadata} from 'next';
-import {Geist, Geist_Mono} from 'next/font/google';
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
 
-import {Header} from '@/ui/Header';
+import { Header } from '@/ui/Header';
 import AuthSessionProvider from '@/ui/SessionProvider';
 
-import './globals.css';
+import '../styles/globals.scss';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
-  subsets: ['latin']
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
-  subsets: ['latin']
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
   title: 'Learning Hub',
-  description: 'Learning Hub'
+  description: 'Learning Hub',
 };
 
 const RootLayout = async ({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode;
-}>) =>  {
+}>) => {
   return (
-    <html lang='en'>
-    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <AuthSessionProvider>
-            <Header />
-            <main className='pt-18 min-h-screen'>
-                {children}
-            </main>
+          <Header />
+          <main className="pt-18 min-h-screen">{children}</main>
         </AuthSessionProvider>
-    </body>
+      </body>
     </html>
   );
 };
