@@ -1,3 +1,4 @@
+@use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
 .card {
@@ -18,7 +19,7 @@
 
   &.selected {
     background: linear-gradient(to bottom right, #f0fdf4, #dcfce7);
-    border: 2px solid #4ade80;
+    border: 2px solid $main-light;
     box-shadow: 0 0 0 3px #bbf7d0;
   }
 }
@@ -50,7 +51,7 @@
   }
 
   &.selected {
-    background: linear-gradient(to right, #4ade80, #22c55e);
+    background: linear-gradient(to right, $main-light, $main);
   }
 }
 
@@ -67,7 +68,7 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  color: #16a34a;
+  color: $main-dark;
   font-size: 0.875rem;
   font-weight: 500;
 
@@ -185,16 +186,16 @@
   margin-top: auto;
 
   &.default {
-    background: linear-gradient(to right, #4ade80, #22c55e);
+    background: linear-gradient(to right, $main-light, $main);
     color: white;
 
     &:hover {
-      background: linear-gradient(to right, #22c55e, #16a34a);
+      background: linear-gradient(to right, $main, $main-dark);
     }
   }
 
   &.selected {
-    background: linear-gradient(to right, #22c55e, #16a34a);
+    background: linear-gradient(to right, $main, $main-dark);
     color: white;
     cursor: default;
   }

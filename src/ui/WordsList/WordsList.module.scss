@@ -1,3 +1,4 @@
+@use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
 .container {
@@ -85,11 +86,11 @@
   transition: background 0.2s;
 
   &.save {
-    background: #22c55e;
+    background: $main;
     color: white;
 
     &:hover {
-      background: #16a34a;
+      background: $main-dark;
     }
   }
 
@@ -121,7 +122,7 @@
     transition: color 0.2s;
 
     &:hover {
-      color: #dc2626;
+      color: $red;
     }
 
     svg {

@@ -1,3 +1,4 @@
+@use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
 .container {
@@ -75,7 +76,7 @@
   margin-bottom: 2rem;
 
   .progressFill {
-    background: #22c55e;
+    background: $main;
     height: 0.75rem;
     border-radius: 9999px;
     transition: all 0.3s;
@@ -95,7 +96,7 @@
     transition: all 1s;
 
     &.green {
-      background: #4ade80;
+      background: $main-light;
     }
 
     &.yellow {

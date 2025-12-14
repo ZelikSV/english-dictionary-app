@@ -1,3 +1,4 @@
+@use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
 .container {
@@ -43,7 +44,7 @@
   &:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.5);
-    border-color: #4ade80;
+    border-color: $main-light;
   }
 }
 

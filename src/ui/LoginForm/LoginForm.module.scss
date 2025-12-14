@@ -31,7 +31,7 @@
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px #4ade80;
+    box-shadow: 0 0 0 2px $main-light;
     border-color: transparent;
   }
 
@@ -69,12 +69,12 @@
 .error {
   margin-top: 0.25rem;
   font-size: 0.875rem;
-  color: #dc2626;
+  color: $red;
 }
 
 .submitButton {
   width: 100%;
-  background: linear-gradient(to right, #4ade80, #22c55e);
+  background: linear-gradient(to right, $main-light, $main);
   color: white;
   padding: 0.75rem;
   border-radius: $spacing-lg;
@@ -83,7 +83,7 @@
   @include transition;
 
   &:hover:not(:disabled) {
-    background: linear-gradient(to right, #22c55e, #16a34a);
+    background: linear-gradient(to right, $main, $main-dark);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   }
 

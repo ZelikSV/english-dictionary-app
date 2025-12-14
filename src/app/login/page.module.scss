@@ -30,7 +30,7 @@
 .iconWrapper {
   width: 4rem;
   height: 4rem;
-  background: linear-gradient(to bottom right, #4ade80, #22c55e);
+  background: linear-gradient(to bottom right, $main-light, $main);
   border-radius: $spacing-lg;
   @include flex-center;
   margin: 0 auto $spacing-md;
@@ -63,7 +63,7 @@
 }
 
 .link {
-  color: #16a34a;
+  color: $main-dark;
   font-weight: 500;
   @include transition;
 

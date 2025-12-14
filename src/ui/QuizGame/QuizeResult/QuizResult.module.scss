@@ -1,3 +1,4 @@
+@use '../../../styles/variables' as *;
 @use '../../../styles/mixins' as *;
 
 .container {
@@ -32,7 +33,7 @@
   margin-bottom: 1.5rem;
 
   &.excellent {
-    color: #22c55e;
+    color: $main;
   }
 
   &.good {
@@ -70,7 +71,7 @@
     .statValue {
       font-size: 1.875rem;
       font-weight: 700;
-      color: #22c55e;
+      color: $main;
     }
   }
 
@@ -127,10 +128,10 @@
   }
 
   &.restart {
-    background: #22c55e;
+    background: $main;
 
     &:hover {
-      background: #16a34a;
+      background: $main-dark;
     }
   }
 

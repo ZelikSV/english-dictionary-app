@@ -1,3 +1,4 @@
+@use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
 .wrapper {
@@ -39,7 +40,7 @@
   }
 
   &.home:hover svg {
-    color: #22c55e;
+    color: $main;
   }
 }
 
@@ -69,7 +70,7 @@
   transition: all 0.2s;
 
   &.active {
-    background: linear-gradient(to right, #4ade80, #22c55e);
+    background: linear-gradient(to right, $main-light, $main);
     color: white;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   }

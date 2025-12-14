@@ -40,7 +40,7 @@
 .logo {
   width: 2rem;
   height: 2rem;
-  background: linear-gradient(to bottom right, #4ade80, #22c55e);
+  background: linear-gradient(to bottom right, $main-light, $main);
   border-radius: $border-radius-md;
   @include flex-center;
 
@@ -58,6 +58,6 @@
   @include transition;
 
   &:hover {
-    color: #16a34a;
+    color: $main-dark;
   }
 }
