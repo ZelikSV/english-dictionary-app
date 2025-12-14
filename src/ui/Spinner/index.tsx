@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './Spinner.module.scss';
 
 interface SpinnerProps {
     size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -8,41 +9,18 @@ interface SpinnerProps {
 }
 
 const Spinner: React.FC<SpinnerProps> = ({
-                                             size = 'md',
-                                             color = 'blue',
-                                             className = '',
-                                             text
-                                         }) => {
-    const sizes = {
-        sm: 'w-4 h-4',
-        md: 'w-6 h-6',
-        lg: 'w-8 h-8',
-        xl: 'w-12 h-12'
-    };
-
-    const colors = {
-        blue: 'border-blue-500',
-        gray: 'border-gray-500',
-        white: 'border-white',
-        green: 'border-green-500',
-        red: 'border-red-500'
-    };
-
-    const spinnerClasses = `
-    ${sizes[size]} 
-    ${colors[color]}
-    border-2 
-    border-t-transparent 
-    rounded-full 
-    animate-spin
-    ${className}
-  `.trim().replace(/\s+/g, ' ');
+    size = 'md',
+    color = 'blue',
+    className = '',
+    text,
+}) => {
+    const spinnerClasses = `${styles.spinner} ${styles[size]} ${styles[color]} ${className}`;
 
     if (text) {
         return (
-            <div className='flex items-center space-x-3'>
+            <div className={styles.wrapper}>
                 <div className={spinnerClasses}></div>
-                <span className='text-gray-600'>{text}</span>
+                <span className={styles.spinnerText}>{text}</span>
             </div>
         );
     }

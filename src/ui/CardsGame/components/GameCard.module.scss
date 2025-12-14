@@ -1,0 +1,110 @@
+@use '../../../styles/mixins' as *;
+
+.cardContainer {
+  position: relative;
+  perspective: 1000px;
+
+  &:hover .cardInner {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.cardInner {
+  position: relative;
+  width: 100%;
+  height: 16rem;
+  cursor: pointer;
+  transition: transform 0.7s;
+  transform-style: preserve-3d;
+
+  &.flipped {
+    transform: rotateY(180deg);
+  }
+}
+
+.cardFace {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+}
+
+.cardFront {
+  background: white;
+  border: 2px solid #d1d5db;
+  transition: box-shadow 0.2s;
+}
+
+.cardBack {
+  background: linear-gradient(to bottom right, #a855f7, #ec4899);
+  transform: rotateY(180deg);
+}
+
+.cardContent {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.languageLabel {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+}
+
+.wordText {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1rem;
+
+  @media (min-width: 1024px) {
+    font-size: 1.875rem;
+  }
+}
+
+.flipHint {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.backContent {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.backLabel {
+  font-size: 0.75rem;
+  color: white;
+  opacity: 0.9;
+  margin-bottom: 0.75rem;
+}
+
+.backText {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1rem;
+
+  @media (min-width: 1024px) {
+    font-size: 1.875rem;
+  }
+}
+
+.eyeIcon {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: white;
+    opacity: 0.75;
+  }
+}

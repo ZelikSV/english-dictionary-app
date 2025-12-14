@@ -1,0 +1,27 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.container {
+  text-align: center;
+}
+
+.dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  transition: background-color 0.2s;
+
+  &.flipped {
+    background: $main;
+  }
+
+  &.notFlipped {
+    background: #d1d5db;
+  }
+}

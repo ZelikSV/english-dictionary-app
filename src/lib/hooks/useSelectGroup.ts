@@ -5,43 +5,43 @@ import Cookies from 'js-cookie';
 let globalListeners: ((selectedId: string | null) => void)[] = [];
 
 const notifyListeners = (selectedId: string | null) => {
-  globalListeners.forEach(listener => listener(selectedId));
+    globalListeners.forEach(listener => listener(selectedId));
 };
 
 export const useSelectGroup = (groupId: string) => {
-  const [loading, setLoading] = useState(false);
-  const [isSelected, setIsSelected] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [isSelected, setIsSelected] = useState(false);
 
-  useEffect(() => {
-    // Initialize from cookie
-    const selectedGroupId = Cookies.get('group') || null;
+    useEffect(() => {
+        // Initialize from cookie
+        const selectedGroupId = Cookies.get('group') || null;
 
-    setIsSelected(selectedGroupId === groupId);
+        setIsSelected(selectedGroupId === groupId);
 
-    // Listen for global changes
-    const listener = (selectedId: string | null) => {
-      setIsSelected(selectedId === groupId);
+        // Listen for global changes
+        const listener = (selectedId: string | null) => {
+            setIsSelected(selectedId === groupId);
+        };
+
+        globalListeners.push(listener);
+
+        return () => {
+            globalListeners = globalListeners.filter(l => l !== listener);
+        };
+    }, [groupId]);
+
+    const handleSelectGroup = () => {
+        setLoading(true);
+
+        Cookies.set('group', groupId);
+        notifyListeners(groupId);
+
+        setTimeout(() => setLoading(false), 500);
     };
 
-    globalListeners.push(listener);
-
-    return () => {
-      globalListeners = globalListeners.filter(l => l !== listener);
+    return {
+        handleSelectGroup,
+        isSelectingGroup: loading,
+        isSelected,
     };
-  }, [groupId]);
-
-  const handleSelectGroup = () => {
-    setLoading(true);
-
-    Cookies.set('group', groupId);
-    notifyListeners(groupId);
-
-    setTimeout(() => setLoading(false), 500);
-  };
-
-  return {
-    handleSelectGroup,
-    isSelectingGroup: loading,
-    isSelected,
-  };
 };

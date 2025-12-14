@@ -1,9 +1,10 @@
 import EditWordsGroupForm from '@/ui/EditWordsGroupForm';
 import Breadcrumbs from '@/ui/Breadcrumbs';
-import {getWordsGroupById} from '@/lib/actions';
+import { getWordsGroupById } from '@/lib/actions';
+import styles from './page.module.scss';
 
-const GroupsEdit = async (props: { params: Promise<{ id: string }> })=> {
-    const {id} = await props.params;
+const GroupsEdit = async (props: { params: Promise<{ id: string }> }) => {
+    const { id } = await props.params;
 
     const group = await getWordsGroupById(id);
 
@@ -12,14 +13,17 @@ const GroupsEdit = async (props: { params: Promise<{ id: string }> })=> {
     }
 
     return (
-        <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6'>
-            <Breadcrumbs breadcrumbs={[
-                {
-                    label: 'Edit Group',
-                    href: `/groups/${id}/edit`,
-                    active: true
-                }
-            ]} showBackButton={false} />
+        <div className={styles.container}>
+            <Breadcrumbs
+                breadcrumbs={[
+                    {
+                        label: 'Edit Group',
+                        href: `/groups/${id}/edit`,
+                        active: true,
+                    },
+                ]}
+                showBackButton={false}
+            />
             <EditWordsGroupForm group={group} />
         </div>
     );

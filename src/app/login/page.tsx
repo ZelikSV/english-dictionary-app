@@ -2,26 +2,34 @@ import React from 'react';
 import Link from 'next/link';
 
 import LoginForm from '@/ui/LoginForm';
+import styles from './page.module.scss';
 
 const LoginPage = async () => {
     return (
-        <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex justify-center p-6'>
-            <div className='w-full max-w-md'>
-                <div className='bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-100/50'>
-                    <div className='text-center mb-8'>
-                        <div className='w-16 h-16 bg-gradient-to-br from-green-400 to-green-500 rounded-xl flex items-center justify-center mx-auto mb-4'>
-                            <svg className='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' />
+        <div className={styles.pageContainer}>
+            <div className={styles.wrapper}>
+                <div className={styles.card}>
+                    <div className={styles.header}>
+                        <div className={styles.iconWrapper}>
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                />
                             </svg>
                         </div>
-                        <h1 className='text-2xl font-bold text-gray-800 mb-2'>Вхід</h1>
-                        <p className='text-gray-600'>Увійдіть до свого облікового запису</p>
+                        <h1 className={styles.title}>Вхід</h1>
+                        <p className={styles.subtitle}>
+                            Увійдіть до свого облікового запису
+                        </p>
                     </div>
                     <LoginForm />
-                    <div className='text-center mt-6'>
-                        <p className='text-gray-600'>
+                    <div className={styles.footer}>
+                        <p>
                             Немає облікового запису?{' '}
-                            <Link href='/register' className='text-green-600 hover:text-green-700 font-medium'>
+                            <Link href="/register" className={styles.link}>
                                 Зареєструватися
                             </Link>
                         </p>
@@ -29,7 +37,6 @@ const LoginPage = async () => {
                 </div>
             </div>
         </div>
-
     );
 };
 

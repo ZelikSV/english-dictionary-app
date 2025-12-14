@@ -1,0 +1,111 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.container {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.badgeWrapper {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  &.english {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  &.ukrainian {
+    background: #fef3c7;
+    color: #92400e;
+  }
+}
+
+.questionSection {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  .prompt {
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+  }
+
+  .questionWord {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1rem;
+  }
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.optionButton {
+  width: 100%;
+  padding: 1rem;
+  text-align: left;
+  border: 2px solid;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  font-weight: 500;
+
+  .optionLabel {
+    font-size: 0.875rem;
+    color: #6b7280;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  &.default {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    color: #374151;
+
+    &:hover {
+      background: #f3f4f6;
+      border-color: #9ca3af;
+    }
+  }
+
+  &.selected {
+    background: #dbeafe;
+    border-color: #3b82f6;
+    color: #1e40af;
+  }
+
+  &.correct {
+    background: #dcfce7;
+    border-color: $main;
+    color: #166534;
+  }
+
+  &.incorrect {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #991b1b;
+  }
+
+  &.disabled {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    color: #6b7280;
+  }
+}

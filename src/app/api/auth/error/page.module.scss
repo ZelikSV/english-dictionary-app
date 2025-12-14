@@ -1,0 +1,44 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/_variables' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #fef2f2, #fee2e2);
+  padding: 1.5rem;
+}
+
+.card {
+  background: $white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-radius: 0.75rem;
+  padding: 2.5rem;
+  max-width: 28rem;
+  width: 100%;
+  text-align: center;
+}
+
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: $red;
+  margin-bottom: 1rem;
+}
+
+.message {
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+}

@@ -1,0 +1,107 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: $spacing-sm;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem $spacing-md;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #e5e7eb;
+  border-radius: $spacing-lg;
+  color: #000;
+  @include transition;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px $main-light;
+    border-color: transparent;
+  }
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+}
+
+.passwordWrapper {
+  position: relative;
+}
+
+.passwordInput {
+  padding-right: 3rem;
+}
+
+.toggleButton {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  @include transition;
+
+  &:hover {
+    color: #374151;
+  }
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+.error {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: $red;
+}
+
+.submitButton {
+  width: 100%;
+  background: linear-gradient(to right, $main-light, $main);
+  color: white;
+  padding: 0.75rem;
+  border-radius: $spacing-lg;
+  font-weight: 500;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  @include transition;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(to right, $main, $main-dark);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.buttonContent {
+  @include flex-center;
+  gap: 10px;
+}
+
+.spinner {
+  display: inline-block;
+}
+
+.buttonText {
+  color: white;
+}

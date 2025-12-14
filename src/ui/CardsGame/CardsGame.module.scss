@@ -1,0 +1,27 @@
+@use '../../styles/mixins' as *;
+
+.container {
+  min-height: 94vh;
+  background: linear-gradient(to bottom right, #faf5ff, #fce7f3);
+  padding: 1rem;
+}
+
+.wrapper {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

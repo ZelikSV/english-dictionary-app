@@ -1,43 +1,40 @@
-import type {Metadata} from 'next';
-import {Geist, Geist_Mono} from 'next/font/google';
-
-import {Header} from '@/ui/Header';
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import { Header } from '@/ui/Header';
 import AuthSessionProvider from '@/ui/SessionProvider';
-
-import './globals.css';
+import '../styles/globals.scss';
+import styles from './layout.module.scss';
 
 const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin']
+    variable: '--font-geist-sans',
+    subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin']
+    variable: '--font-geist-mono',
+    subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: 'Learning Hub',
-  description: 'Learning Hub'
+    title: 'Learning Hub',
+    description: 'Learning Hub',
 };
 
 const RootLayout = async ({
-  children
+    children,
 }: Readonly<{
-  children: React.ReactNode;
-}>) =>  {
-  return (
-    <html lang='en'>
-    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <AuthSessionProvider>
-            <Header />
-            <main className='pt-18 min-h-screen'>
-                {children}
-            </main>
-        </AuthSessionProvider>
-    </body>
-    </html>
-  );
+    children: React.ReactNode;
+}>) => {
+    return (
+        <html lang="en">
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+                <AuthSessionProvider>
+                    <Header />
+                    <main className={styles.main}>{children}</main>
+                </AuthSessionProvider>
+            </body>
+        </html>
+    );
 };
 
 export default RootLayout;

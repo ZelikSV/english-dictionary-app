@@ -10,69 +10,70 @@ import { GameProgress } from './components/GameProgress';
 import { GameCard } from './components/GameCard';
 import { RoundComplete } from './components/RoundComplete';
 import { ProgressIndicator } from './components/ProgressIndicator';
+import styles from './CardsGame.module.scss';
 
 const CardsGame = () => {
-  const router = useRouter();
-  const { wordsByGroups, loading } = useGetWordsByGroupId();
+    const router = useRouter();
+    const { wordsByGroups, loading } = useGetWordsByGroupId();
 
-  const {
-    currentCards,
-    roundStats,
-    gameLanguage,
-    gameStarted,
-    allCardsFlipped,
-    initializeGame,
-    flipCard,
-    nextRound,
-    startNewRound,
-  } = useCardsGame(wordsByGroups);
+    const {
+        currentCards,
+        roundStats,
+        gameLanguage,
+        gameStarted,
+        allCardsFlipped,
+        initializeGame,
+        flipCard,
+        nextRound,
+        startNewRound,
+    } = useCardsGame(wordsByGroups);
 
-  useEffect(() => {
-    if (!loading) {
-      if (wordsByGroups?.length < CARDS_PER_ROUND) {
-        alert(`Потрібно мінімум ${CARDS_PER_ROUND} слів для вивчення карток!`);
-        router.push('/');
+    useEffect(() => {
+        if (!loading) {
+            if (wordsByGroups?.length < CARDS_PER_ROUND) {
+                alert(`Потрібно мінімум ${CARDS_PER_ROUND} слів для вивчення карток!`);
+                router.push('/');
 
-        return;
-      }
+                return;
+            }
 
-      initializeGame();
+            initializeGame();
+        }
+    }, [loading, wordsByGroups.length, initializeGame, router]);
+
+    if (wordsByGroups.length === 0 || !gameStarted) {
+        return <Loading />;
     }
-  }, [loading, wordsByGroups.length, initializeGame, router]);
 
-  if (wordsByGroups.length === 0 || !gameStarted) {
-    return <Loading />;
-  }
+    return (
+        <div className={styles.container}>
+            <div className={styles.wrapper}>
+                <GameHeader
+                    currentRound={roundStats.currentRound}
+                    gameLanguage={gameLanguage}
+                    totalFlipped={roundStats.totalFlipped}
+                />
 
-  return (
-    <div className="min-h-[94vh] bg-gradient-to-br from-purple-50 to-pink-100 p-4">
-      <div className="max-w-6xl mx-auto">
-        <GameHeader
-          currentRound={roundStats.currentRound}
-          gameLanguage={gameLanguage}
-          totalFlipped={roundStats.totalFlipped}
-        />
+                <GameProgress
+                    cards={currentCards}
+                    cardsPerRound={CARDS_PER_ROUND}
+                    allCardsFlipped={allCardsFlipped}
+                />
 
-        <GameProgress
-          cards={currentCards}
-          cardsPerRound={CARDS_PER_ROUND}
-          allCardsFlipped={allCardsFlipped}
-        />
+                <div className={styles.cardsGrid}>
+                    {currentCards.map(card => (
+                        <GameCard key={card.id} card={card} onFlip={flipCard} />
+                    ))}
+                </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {currentCards.map(card => (
-            <GameCard key={card.id} card={card} onFlip={flipCard} />
-          ))}
+                {allCardsFlipped && (
+                    <RoundComplete onNextRound={nextRound} onShuffle={startNewRound} />
+                )}
+
+                <ProgressIndicator cards={currentCards} />
+            </div>
         </div>
-
-        {allCardsFlipped && (
-          <RoundComplete onNextRound={nextRound} onShuffle={startNewRound} />
-        )}
-
-        <ProgressIndicator cards={currentCards} />
-      </div>
-    </div>
-  );
+    );
 };
 
 export default CardsGame;

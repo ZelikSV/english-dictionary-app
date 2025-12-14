@@ -1,16 +1,20 @@
 import NewWordsGroupForm from '@/ui/NewWordsGroupForm';
 import Breadcrumbs from '@/ui/Breadcrumbs';
+import styles from './page.module.scss';
 
 const GroupsCreate = () => {
     return (
-        <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6'>
-            <Breadcrumbs breadcrumbs={[
-                {
-                    label: 'Create New Group',
-                    href: '/groups/new',
-                    active: true
-                }
-            ]} showBackButton={false} />
+        <div className={styles.page}>
+            <Breadcrumbs
+                breadcrumbs={[
+                    {
+                        label: 'Create New Group',
+                        href: '/groups/new',
+                        active: true,
+                    },
+                ]}
+                showBackButton={false}
+            />
             <NewWordsGroupForm />
         </div>
     );

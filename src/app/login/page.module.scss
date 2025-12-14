@@ -1,0 +1,73 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.pageContainer {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #f9fafb, #f3f4f6);
+  @include flex-center;
+  padding: $spacing-lg;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 28rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border-radius: $spacing-xl;
+  padding: $spacing-2xl;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(243, 244, 246, 0.5);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: $spacing-2xl;
+}
+
+.iconWrapper {
+  width: 4rem;
+  height: 4rem;
+  background: linear-gradient(to bottom right, $main-light, $main);
+  border-radius: $spacing-lg;
+  @include flex-center;
+  margin: 0 auto $spacing-md;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    color: white;
+  }
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: $spacing-sm;
+}
+
+.subtitle {
+  color: #4b5563;
+}
+
+.footer {
+  text-align: center;
+  margin-top: $spacing-lg;
+
+  p {
+    color: #4b5563;
+  }
+}
+
+.link {
+  color: $main-dark;
+  font-weight: 500;
+  @include transition;
+
+  &:hover {
+    color: #15803d;
+  }
+}

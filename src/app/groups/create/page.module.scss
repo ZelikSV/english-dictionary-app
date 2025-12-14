@@ -1,0 +1,7 @@
+@use '../../../styles/mixins' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #f9fafb, #f3f4f6);
+  padding: 1.5rem;
+}
