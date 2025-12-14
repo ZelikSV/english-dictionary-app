@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './ProgressIndicator.module.scss';
 
 interface Card {
   id: string;
@@ -13,16 +14,12 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   cards,
 }) => {
   return (
-    <div className="text-center">
-      <div className="inline-flex items-center gap-2">
-        {cards.map(card => (
-          <div
-            key={card.id}
-            className={`w-3 h-3 rounded-full transition-colors ${
-              card.isFlipped ? 'bg-green-500' : 'bg-gray-300'
-            }`}
-          />
-        ))}
+    <div className={styles.container}>
+      <div className={styles.dots}>
+        {cards.map(card => {
+          const dotClass = card.isFlipped ? styles.flipped : styles.notFlipped;
+          return <div key={card.id} className={`${styles.dot} ${dotClass}`} />;
+        })}
       </div>
     </div>
   );

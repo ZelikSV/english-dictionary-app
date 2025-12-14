@@ -8,6 +8,7 @@ import { useGetWordsByGroupId } from '@/lib/hooks/useGetWordGroupById';
 import { Loading } from '@/ui/Loading';
 import { GameResults } from '@/ui/SpellingGame/GameResults';
 import { GameQuestion } from '@/ui/SpellingGame/GameQuestion';
+import styles from './SpellingGame.module.scss';
 
 export interface QuestionData {
   word: IWord;
@@ -214,36 +215,31 @@ const SpellingGame = () => {
   }
 
   return (
-    <div className="min-h-[94vh] bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <button
-            onClick={handleBackToHomePage}
-            className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
-          >
-            <ArrowLeftIcon className="w-5 h-5 mr-2" />
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
+        <div className={styles.header}>
+          <button onClick={handleBackToHomePage} className={styles.backButton}>
+            <ArrowLeftIcon />
             Назад
           </button>
 
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-800">
-              Перевірка правопису
-            </h1>
-            <p className="text-gray-600">
+          <div className={styles.headerCenter}>
+            <h1>Перевірка правопису</h1>
+            <p>
               Питання {gameStats.totalQuestions + 1} з {MAX_QUESTIONS}
             </p>
           </div>
 
-          <div className="text-right text-sm text-gray-600">
+          <div className={styles.headerRight}>
             <p>
               ✅ {gameStats.correct} | ❌ {gameStats.incorrect}
             </p>
           </div>
         </div>
 
-        <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
+        <div className={styles.progressBar}>
           <div
-            className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+            className={styles.progressFill}
             style={{
               width: `${(gameStats.totalQuestions / MAX_QUESTIONS) * 100}%`,
             }}

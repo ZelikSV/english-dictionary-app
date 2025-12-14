@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './GameProgress.module.scss';
 
 interface Card {
   id: string;
@@ -19,18 +20,16 @@ export const GameProgress: React.FC<GameProgressProps> = ({
   const flippedCount = cards.filter(card => card.isFlipped).length;
 
   return (
-    <div className="text-center mb-8">
-      <p className="text-lg text-gray-700 mb-2">
+    <div className={styles.container}>
+      <p className={styles.instruction}>
         Подумайте над перекладом, потім клікніть на картку для перевірки
       </p>
-      <div className="flex justify-center items-center gap-4 text-sm text-gray-600">
+      <div className={styles.stats}>
         <span>
           Перевернуто: {flippedCount}/{cardsPerRound}
         </span>
         {allCardsFlipped && (
-          <span className="text-green-600 font-medium">
-            ✅ Всі картки відкриті!
-          </span>
+          <span className={styles.allComplete}>✅ Всі картки відкриті!</span>
         )}
       </div>
     </div>

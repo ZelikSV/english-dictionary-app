@@ -1,0 +1,68 @@
+@use '../../styles/mixins' as *;
+
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+}
+
+.wrapper {
+  position: relative;
+}
+
+.iconLeft {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem;
+  display: flex;
+  align-items: center;
+  transform: translateY(-50%);
+  pointer-events: none;
+
+  svg {
+    height: 1.25rem;
+    width: 1.25rem;
+    color: #9ca3af;
+  }
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 2.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  border-radius: 0.75rem;
+  color: #1f2937;
+  transition: all 0.2s;
+
+  &::placeholder {
+    color: #6b7280;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.5);
+    border-color: #4ade80;
+  }
+}
+
+.clearButton {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #4b5563;
+  }
+
+  svg {
+    height: 1.25rem;
+    width: 1.25rem;
+    color: #9ca3af;
+  }
+}

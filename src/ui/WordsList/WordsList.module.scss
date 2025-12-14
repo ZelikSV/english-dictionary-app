@@ -1,0 +1,132 @@
+@use '../../styles/mixins' as *;
+
+.container {
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.75rem;
+  }
+}
+
+.list {
+  max-height: 16rem;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border-bottom: 1px solid #f3f4f6;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.editMode {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+
+  input {
+    flex: 1;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    color: black;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 1px #3b82f6;
+    }
+  }
+}
+
+.viewMode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  .content {
+    flex: 1;
+
+    .en {
+      font-weight: 500;
+      color: #1f2937;
+    }
+
+    .separator {
+      color: #6b7280;
+      margin: 0 0.5rem;
+    }
+
+    .ua {
+      color: #374151;
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
+.button {
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  transition: background 0.2s;
+
+  &.save {
+    background: #22c55e;
+    color: white;
+
+    &:hover {
+      background: #16a34a;
+    }
+  }
+
+  &.cancel {
+    background: #6b7280;
+    color: white;
+
+    &:hover {
+      background: #4b5563;
+    }
+  }
+
+  &.edit {
+    color: #3b82f6;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #2563eb;
+    }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &.delete {
+    color: #ef4444;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #dc2626;
+    }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}

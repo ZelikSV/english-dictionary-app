@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-
 import { Header } from '@/ui/Header';
 import AuthSessionProvider from '@/ui/SessionProvider';
-
 import '../styles/globals.scss';
+import styles from './layout.module.scss';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,7 +32,7 @@ const RootLayout = async ({
       >
         <AuthSessionProvider>
           <Header />
-          <main className="pt-18 min-h-screen">{children}</main>
+          <main className={styles.main}>{children}</main>
         </AuthSessionProvider>
       </body>
     </html>

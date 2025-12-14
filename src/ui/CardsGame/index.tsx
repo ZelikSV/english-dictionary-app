@@ -10,6 +10,7 @@ import { GameProgress } from './components/GameProgress';
 import { GameCard } from './components/GameCard';
 import { RoundComplete } from './components/RoundComplete';
 import { ProgressIndicator } from './components/ProgressIndicator';
+import styles from './CardsGame.module.scss';
 
 const CardsGame = () => {
   const router = useRouter();
@@ -45,8 +46,8 @@ const CardsGame = () => {
   }
 
   return (
-    <div className="min-h-[94vh] bg-gradient-to-br from-purple-50 to-pink-100 p-4">
-      <div className="max-w-6xl mx-auto">
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
         <GameHeader
           currentRound={roundStats.currentRound}
           gameLanguage={gameLanguage}
@@ -59,7 +60,7 @@ const CardsGame = () => {
           allCardsFlipped={allCardsFlipped}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className={styles.cardsGrid}>
           {currentCards.map(card => (
             <GameCard key={card.id} card={card} onFlip={flipCard} />
           ))}

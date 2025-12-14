@@ -9,6 +9,7 @@ import { Loading } from '@/ui/Loading';
 import { QuizResult } from '@/ui/QuizGame/QuizeResult';
 import { QuizQuestion } from '@/ui/QuizGame/QuizQuestion';
 import { Lang } from '@/lib/constants';
+import styles from './QuizGame.module.scss';
 
 export interface IQuizQuestion {
   id: string;
@@ -242,53 +243,50 @@ const QuizGame = () => {
     );
   }
 
+  const getTimerColorClass = () => {
+    if (timeLeft > 10) return styles.green;
+    if (timeLeft > 5) return styles.yellow;
+    return styles.red;
+  };
+
   return (
-    <div className="min-h-[94vh] bg-gradient-to-br from-green-50 to-emerald-100 p-4">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <button
-            onClick={handleBackToHomePage}
-            className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
-          >
-            <ArrowLeftIcon className="w-5 h-5 mr-2" />
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
+        <div className={styles.header}>
+          <button onClick={handleBackToHomePage} className={styles.backButton}>
+            <ArrowLeftIcon />
             Назад
           </button>
 
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-800">Тестування</h1>
-            <p className="text-gray-600">
+          <div className={styles.headerCenter}>
+            <h1>Тестування</h1>
+            <p>
               Питання {quizStats.totalQuestions + 1} з {MAX_QUESTIONS}
             </p>
           </div>
 
-          <div className="text-right">
-            <div className="flex items-center text-sm text-gray-600 mb-1">
-              <ClockIcon className="w-4 h-4 mr-1" />
+          <div className={styles.headerRight}>
+            <div className={styles.timer}>
+              <ClockIcon />
               {timeLeft}с
             </div>
           </div>
         </div>
 
-        <div className="w-full bg-gray-200 rounded-full h-3 mb-8">
+        <div className={styles.progressBar}>
           <div
-            className="bg-green-500 h-3 rounded-full transition-all duration-300"
+            className={styles.progressFill}
             style={{
               width: `${(quizStats.totalQuestions / MAX_QUESTIONS) * 100}%`,
             }}
           />
         </div>
 
-        <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
+        <div className={styles.timerBar}>
           <div
-            className={`h-2 rounded-full transition-all duration-1000 ${
-              timeLeft > 10
-                ? 'bg-green-400'
-                : timeLeft > 5
-                  ? 'bg-yellow-400'
-                  : 'bg-red-400'
-            }`}
+            className={`${styles.timerFill} ${getTimerColorClass()}`}
             style={{ width: `${(timeLeft / TIME_PER_QUESTION) * 100}%` }}
-          ></div>
+          />
         </div>
 
         {currentQuestion && (

@@ -1,0 +1,210 @@
+@use '../../styles/mixins' as *;
+
+.card {
+  backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  height: 20rem;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(243, 244, 246, 0.5);
+
+  &:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  &.selected {
+    background: linear-gradient(to bottom right, #f0fdf4, #dcfce7);
+    border: 2px solid #4ade80;
+    box-shadow: 0 0 0 3px #bbf7d0;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  min-height: 2rem;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.indicator {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+
+  &.default {
+    background: linear-gradient(to right, #c084fc, #a855f7);
+  }
+
+  &.selected {
+    background: linear-gradient(to right, #4ade80, #22c55e);
+  }
+}
+
+.title {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 1.125rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selectedBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #16a34a;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  margin-left: 0.75rem;
+}
+
+.actionButton {
+  width: 2rem;
+  height: 2rem;
+  background: #f3f4f6;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+
+  &.edit:hover {
+    background: #dbeafe;
+
+    svg {
+      color: #2563eb;
+    }
+  }
+
+  &.delete:hover {
+    background: #fee2e2;
+
+    svg {
+      color: #ef4444;
+    }
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    color: #4b5563;
+    transition: color 0.2s;
+  }
+}
+
+.wordsCount {
+  background: linear-gradient(to right, #f9fafb, #f3f4f6);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+
+  .count {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+  }
+
+  .label {
+    color: #4b5563;
+    margin-left: 0.5rem;
+  }
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.wordsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  height: 5rem;
+  overflow: hidden;
+}
+
+.wordTag {
+  background: #1f2937;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  height: fit-content;
+}
+
+.moreTag {
+  background: #e5e7eb;
+  color: #4b5563;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  height: fit-content;
+}
+
+.selectButton {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: auto;
+
+  &.default {
+    background: linear-gradient(to right, #4ade80, #22c55e);
+    color: white;
+
+    &:hover {
+      background: linear-gradient(to right, #22c55e, #16a34a);
+    }
+  }
+
+  &.selected {
+    background: linear-gradient(to right, #22c55e, #16a34a);
+    color: white;
+    cursor: default;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}

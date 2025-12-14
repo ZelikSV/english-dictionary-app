@@ -1,0 +1,63 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: linear-gradient(to right, #f9fafb, #f3f4f6);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(229, 231, 235, 0.3);
+}
+
+.container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 $spacing-lg;
+
+  @include respond-to('sm') {
+    padding: 0 $spacing-2xl;
+  }
+
+  @include respond-to('lg') {
+    padding: 0 3rem;
+  }
+}
+
+.content {
+  @include flex-between;
+  height: 4.5rem;
+  padding: 0.75rem 0;
+}
+
+.brand {
+  @include flex-center;
+  gap: 0.75rem;
+}
+
+.logo {
+  width: 2rem;
+  height: 2rem;
+  background: linear-gradient(to bottom right, #4ade80, #22c55e);
+  border-radius: $border-radius-md;
+  @include flex-center;
+
+  span {
+    color: white;
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+}
+
+.title {
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 1.125rem;
+  @include transition;
+
+  &:hover {
+    color: #16a34a;
+  }
+}
