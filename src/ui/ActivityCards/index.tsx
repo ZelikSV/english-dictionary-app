@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { Activity } from '@/types';
 import { activities } from '@/lib/constants';
+
 import styles from './ActivityCards.module.scss';
 
 const ActivityCards = () => {
@@ -21,7 +22,9 @@ const ActivityCards = () => {
                         className={styles.card}
                         onClick={handleActivityClick(activity)}
                     >
-                        <div className={`${styles.iconWrapper} ${activity.color}`}>
+                        <div
+                            className={`${styles.iconWrapper} ${styles[activity.color]}`}
+                        >
                             <activity.icon />
                         </div>
                         <h3 className={styles.cardTitle}>{activity.title}</h3>
