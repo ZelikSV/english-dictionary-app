@@ -1,7 +1,10 @@
 'use client';
 import Link from 'next/link';
+import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
+
 import { HomeIcon, ChevronRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+
 import styles from './Breadcrumbs.module.scss';
 
 interface Breadcrumb {
@@ -50,7 +53,10 @@ const Breadcrumbs = ({ breadcrumbs, showBackButton = true }: BreadcrumbsProps) =
                             )}
                             <Link
                                 href={breadcrumb.href}
-                                className={`${styles.breadcrumbLink} ${breadcrumb.active ? styles.active : styles.inactive}`}
+                                className={clsx(
+                                    styles.breadcrumbLink,
+                                    breadcrumb.active ? styles.active : styles.inactive,
+                                )}
                             >
                                 {breadcrumb.label}
                             </Link>

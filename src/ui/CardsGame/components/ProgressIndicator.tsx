@@ -1,4 +1,6 @@
 import React from 'react';
+import clsx from 'clsx';
+
 import styles from './ProgressIndicator.module.scss';
 
 interface Card {
@@ -14,11 +16,15 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ cards }) =
     return (
         <div className={styles.container}>
             <div className={styles.dots}>
-                {cards.map(card => {
-                    const dotClass = card.isFlipped ? styles.flipped : styles.notFlipped;
-
-                    return <div key={card.id} className={`${styles.dot} ${dotClass}`} />;
-                })}
+                {cards.map(card => (
+                    <div
+                        key={card.id}
+                        className={clsx(styles.dot, {
+                            [styles.flipped]: card.isFlipped,
+                            [styles.notFlipped]: !card.isFlipped,
+                        })}
+                    />
+                ))}
             </div>
         </div>
     );
