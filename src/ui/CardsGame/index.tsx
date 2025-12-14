@@ -5,28 +5,14 @@ import { useRouter } from 'next/navigation';
 import { useGetWordsByGroupId } from '@/lib/hooks/useGetWordGroupById';
 import { Loading } from '@/ui/Loading';
 import { CARDS_PER_ROUND, useCardsGame } from './hooks/useCardsGame';
-import { GameHeader } from './components/GameHeader';
-import { GameProgress } from './components/GameProgress';
-import { GameCard } from './components/GameCard';
-import { RoundComplete } from './components/RoundComplete';
-import { ProgressIndicator } from './components/ProgressIndicator';
-import styles from './CardsGame.module.scss';
+import { GameCard, GameCardActions } from './components';
 
 const CardsGame = () => {
     const router = useRouter();
     const { wordsByGroups, loading } = useGetWordsByGroupId();
 
-    const {
-        currentCards,
-        roundStats,
-        gameLanguage,
-        gameStarted,
-        allCardsFlipped,
-        initializeGame,
-        flipCard,
-        nextRound,
-        startNewRound,
-    } = useCardsGame(wordsByGroups);
+    const { currentCard, gameStarted, initializeGame, flipCard, startNewRound } =
+        useCardsGame(wordsByGroups);
 
     useEffect(() => {
         if (!loading) {
@@ -41,38 +27,15 @@ const CardsGame = () => {
         }
     }, [loading, wordsByGroups.length, initializeGame, router]);
 
-    if (wordsByGroups.length === 0 || !gameStarted) {
+    if (wordsByGroups.length === 0 || !gameStarted || !currentCard) {
         return <Loading />;
     }
 
     return (
-        <div className={styles.container}>
-            <div className={styles.wrapper}>
-                <GameHeader
-                    currentRound={roundStats.currentRound}
-                    gameLanguage={gameLanguage}
-                    totalFlipped={roundStats.totalFlipped}
-                />
-
-                <GameProgress
-                    cards={currentCards}
-                    cardsPerRound={CARDS_PER_ROUND}
-                    allCardsFlipped={allCardsFlipped}
-                />
-
-                <div className={styles.cardsGrid}>
-                    {currentCards.map(card => (
-                        <GameCard key={card.id} card={card} onFlip={flipCard} />
-                    ))}
-                </div>
-
-                {allCardsFlipped && (
-                    <RoundComplete onNextRound={nextRound} onShuffle={startNewRound} />
-                )}
-
-                <ProgressIndicator cards={currentCards} />
-            </div>
-        </div>
+        <>
+            <GameCard key={currentCard.id} card={currentCard} onFlip={flipCard} />
+            <GameCardActions onNextRound={startNewRound} onPrevRound={startNewRound} />
+        </>
     );
 };
 

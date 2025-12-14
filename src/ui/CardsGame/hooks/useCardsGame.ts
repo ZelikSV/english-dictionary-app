@@ -1,9 +1,9 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 import { IWord } from '@/types';
 
 import { Lang } from '@/lib/constants';
 
-export interface Card {
+export interface ICard {
     id: string;
     word: IWord;
     frontText: string;
@@ -12,33 +12,19 @@ export interface Card {
     isFlipped: boolean;
 }
 
-export interface RoundStats {
-    currentRound: number;
-    totalFlipped: number;
-    cardsPerRound: number;
-}
-
-export const CARDS_PER_ROUND = 4;
-const languages = Object.values(Lang);
-const languageIndex = Math.floor(Math.random() * languages.length);
+export const CARDS_PER_ROUND = 1;
 
 export const useCardsGame = (words: IWord[]) => {
-    const [currentCards, setCurrentCards] = useState<Card[]>([]);
-    const [roundStats, setRoundStats] = useState<RoundStats>({
-        currentRound: 1,
-        totalFlipped: 0,
-        cardsPerRound: CARDS_PER_ROUND,
-    });
+    const [currentCard, setCurrentCard] = useState<ICard | null>(null);
     const [gameStarted, setGameStarted] = useState(false);
-    const [allCardsFlipped, setAllCardsFlipped] = useState(false);
-    const gameLanguage = useMemo(() => languages[languageIndex] ?? Lang.EN, []);
+    const gameLanguage = Lang.EN;
 
-    const createCards = useCallback((gameWords: IWord[], language: Lang): Card[] => {
+    const createCard = useCallback((gameWords: IWord[], language: Lang): ICard => {
         const shuffledWords = [...gameWords].sort(() => Math.random() - 0.5);
         const selectedWords = shuffledWords.slice(0, CARDS_PER_ROUND);
         const isEnglish = language === Lang.EN;
 
-        return selectedWords.map(word => ({
+        const [createdCard] = selectedWords.map(word => ({
             id: word.id,
             word,
             frontText: isEnglish ? word.en : word.ua,
@@ -46,65 +32,37 @@ export const useCardsGame = (words: IWord[]) => {
             frontLanguage: language,
             isFlipped: false,
         }));
+
+        return createdCard;
     }, []);
 
     const initializeGame = useCallback(() => {
         setGameStarted(true);
 
-        const newCards = createCards(words, gameLanguage);
+        const newCard = createCard(words, gameLanguage);
 
-        setCurrentCards(newCards);
-    }, [words, gameLanguage, createCards]);
+        setCurrentCard(newCard);
+    }, [words, gameLanguage, createCard]);
 
     const startNewRound = () => {
-        const newCards = createCards(words, gameLanguage);
-        setCurrentCards(newCards);
-        setAllCardsFlipped(false);
+        const newCard = createCard(words, gameLanguage);
+        setCurrentCard(newCard);
     };
 
     const flipCard = useCallback(
         (cardId: string) => {
-            const updatedCards = currentCards.map(card => {
-                if (card.id === cardId && !card.isFlipped) {
-                    setRoundStats(prev => ({
-                        ...prev,
-                        totalFlipped: prev.totalFlipped + 1,
-                    }));
-
-                    return { ...card, isFlipped: true };
-                }
-
-                return card;
-            });
-
-            setCurrentCards(updatedCards);
-
-            const allFlipped = updatedCards.every(card => card.isFlipped);
-
-            if (allFlipped) {
-                setAllCardsFlipped(true);
+            if (currentCard?.id === cardId) {
+                setCurrentCard({ ...currentCard, isFlipped: !currentCard.isFlipped });
             }
         },
-        [currentCards, setRoundStats, setAllCardsFlipped],
+        [currentCard],
     );
 
-    const nextRound = () => {
-        setRoundStats(prev => ({
-            ...prev,
-            currentRound: prev.currentRound + 1,
-        }));
-        startNewRound();
-    };
-
     return {
-        currentCards,
-        roundStats,
-        gameLanguage,
+        currentCard,
         gameStarted,
-        allCardsFlipped,
         initializeGame,
         flipCard,
-        nextRound,
         startNewRound,
     };
 };

@@ -1,11 +1,14 @@
 import React from 'react';
+import clsx from 'clsx';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { Lang } from '@/lib/constants';
-import { Card } from '../hooks/useCardsGame';
-import styles from './GameCard.module.scss';
+
+import { ICard } from '../hooks/useCardsGame';
+
+import styles from './styles.module.scss';
 
 interface GameCardProps {
-    card: Card;
+    card: ICard;
     onFlip: (cardId: string) => void;
 }
 
@@ -21,13 +24,16 @@ export const GameCard: React.FC<GameCardProps> = ({ card, onFlip }) => {
         },
     };
 
-    const cardInnerClass = card.isFlipped
-        ? `${styles.cardInner} ${styles.flipped}`
-        : styles.cardInner;
+    const handleFlip = () => {
+        onFlip(card.id);
+    };
 
     return (
         <div className={styles.cardContainer}>
-            <div className={cardInnerClass} onClick={() => onFlip(card.id)}>
+            <div
+                className={clsx(styles.cardInner, card.isFlipped && styles.flipped)}
+                onClick={handleFlip}
+            >
                 {/* Front side */}
                 <div className={`${styles.cardFace} ${styles.cardFront}`}>
                     <div className={styles.cardContent}>
