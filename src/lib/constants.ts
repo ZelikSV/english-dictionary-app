@@ -33,3 +33,5 @@ export enum Lang {
     EN = 'en',
     UA = 'ua',
 }
+
+export const voicesNames = ['Nicky', 'Aaron', 'Google US English'];
