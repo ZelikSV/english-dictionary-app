@@ -2,77 +2,60 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+
 import { useGetWordsByGroupId } from '@/lib/hooks/useGetWordGroupById';
-import { Loading } from '@/ui/Loading';
-import { CARDS_PER_ROUND, useCardsGame } from './hooks/useCardsGame';
-import { GameHeader } from './components/GameHeader';
-import { GameProgress } from './components/GameProgress';
-import { GameCard } from './components/GameCard';
-import { RoundComplete } from './components/RoundComplete';
-import { ProgressIndicator } from './components/ProgressIndicator';
-import styles from './CardsGame.module.scss';
+import {
+    editCard,
+    selectNewWord,
+    selectPrevWord,
+    useCardGameStore,
+    setWordsMaps,
+    setAvailableWordsIds,
+} from '@/store/cardGameStore';
+
+import { CardPreLoader, GameCard, GameCardActions } from './components';
+
+const CARDS_PER_ROUND = 1;
 
 const CardsGame = () => {
     const router = useRouter();
     const { wordsByGroups, loading } = useGetWordsByGroupId();
-
-    const {
-        currentCards,
-        roundStats,
-        gameLanguage,
-        gameStarted,
-        allCardsFlipped,
-        initializeGame,
-        flipCard,
-        nextRound,
-        startNewRound,
-    } = useCardsGame(wordsByGroups);
+    const { card, availableWordIds, wordsMap, currentWordId } = useCardGameStore();
 
     useEffect(() => {
-        if (!loading) {
+        setWordsMaps(wordsByGroups);
+    }, [wordsByGroups]);
+
+    useEffect(() => {
+        if (Object.keys(wordsMap).length && !availableWordIds.length) {
+            setAvailableWordsIds(Object.keys(wordsMap));
+        }
+
+        if (!currentWordId && availableWordIds.length) {
+            selectNewWord();
+        }
+    }, [wordsMap, availableWordIds]);
+
+    useEffect(() => {
+        if (!loading && wordsByGroups?.length) {
             if (wordsByGroups?.length < CARDS_PER_ROUND) {
                 alert(`Потрібно мінімум ${CARDS_PER_ROUND} слів для вивчення карток!`);
                 router.push('/');
 
                 return;
             }
-
-            initializeGame();
         }
-    }, [loading, wordsByGroups.length, initializeGame, router]);
+    }, [loading, wordsByGroups]);
 
-    if (wordsByGroups.length === 0 || !gameStarted) {
-        return <Loading />;
+    if (wordsByGroups.length === 0 || !card) {
+        return <CardPreLoader />;
     }
 
     return (
-        <div className={styles.container}>
-            <div className={styles.wrapper}>
-                <GameHeader
-                    currentRound={roundStats.currentRound}
-                    gameLanguage={gameLanguage}
-                    totalFlipped={roundStats.totalFlipped}
-                />
-
-                <GameProgress
-                    cards={currentCards}
-                    cardsPerRound={CARDS_PER_ROUND}
-                    allCardsFlipped={allCardsFlipped}
-                />
-
-                <div className={styles.cardsGrid}>
-                    {currentCards.map(card => (
-                        <GameCard key={card.id} card={card} onFlip={flipCard} />
-                    ))}
-                </div>
-
-                {allCardsFlipped && (
-                    <RoundComplete onNextRound={nextRound} onShuffle={startNewRound} />
-                )}
-
-                <ProgressIndicator cards={currentCards} />
-            </div>
-        </div>
+        <>
+            <GameCard key={card.id} card={card} onFlip={editCard} />
+            <GameCardActions onNextRound={selectNewWord} onPrevRound={selectPrevWord} />
+        </>
     );
 };
 

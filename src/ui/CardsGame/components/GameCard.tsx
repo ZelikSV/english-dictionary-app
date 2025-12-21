@@ -1,50 +1,55 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import clsx from 'clsx';
 import { EyeIcon } from '@heroicons/react/24/outline';
-import { Lang } from '@/lib/constants';
-import { Card } from '../hooks/useCardsGame';
-import styles from './GameCard.module.scss';
+import { voicesNames } from '@/lib/constants';
+import { ICard } from '@/store/cardGameStore';
+
+import styles from './styles.module.scss';
 
 interface GameCardProps {
-    card: Card;
-    onFlip: (cardId: string) => void;
+    card: ICard;
+    onFlip: () => void;
 }
 
 export const GameCard: React.FC<GameCardProps> = ({ card, onFlip }) => {
-    const labelMap = {
-        front: {
-            [Lang.EN]: '🇬🇧 English',
-            [Lang.UA]: '🇺🇦 Українська',
-        },
-        back: {
-            [Lang.EN]: '🇺🇦 Переклад',
-            [Lang.UA]: '🇬🇧 Translation',
-        },
-    };
+    const isFirstMount = useRef(true);
 
-    const cardInnerClass = card.isFlipped
-        ? `${styles.cardInner} ${styles.flipped}`
-        : styles.cardInner;
+    useEffect(() => {
+        if (!isFirstMount.current) {
+            const message = new SpeechSynthesisUtterance();
+            const voices = speechSynthesis
+                .getVoices()
+                .filter(voice => voice.lang === 'en-US');
+            const voice = voices.find(voice => voice.name === voicesNames[1]);
+
+            if (card.frontText && voice) {
+                message.text = card.frontText;
+                message.voice = voice;
+
+                speechSynthesis.speak(message);
+            }
+        } else {
+            isFirstMount.current = false;
+        }
+    }, []);
 
     return (
         <div className={styles.cardContainer}>
-            <div className={cardInnerClass} onClick={() => onFlip(card.id)}>
-                {/* Front side */}
+            <div
+                className={clsx(styles.cardInner, card.isFlipped && styles.flipped)}
+                onClick={onFlip}
+            >
                 <div className={`${styles.cardFace} ${styles.cardFront}`}>
                     <div className={styles.cardContent}>
-                        <div className={styles.languageLabel}>
-                            {labelMap.front[card.frontLanguage]}
-                        </div>
+                        <div className={styles.languageLabel}>🇬🇧 English</div>
                         <h3 className={styles.wordText}>{card.frontText}</h3>
                         <p className={styles.flipHint}>Клікніть для перевороту</p>
                     </div>
                 </div>
 
-                {/* Back side */}
                 <div className={`${styles.cardFace} ${styles.cardBack}`}>
                     <div className={styles.backContent}>
-                        <div className={styles.backLabel}>
-                            {labelMap.back[card.frontLanguage]}
-                        </div>
+                        <div className={styles.backLabel}>🇺🇦 Переклад</div>
                         <h3 className={styles.backText}>{card.backText}</h3>
                         <div className={styles.eyeIcon}>
                             <EyeIcon />

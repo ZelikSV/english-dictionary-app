@@ -1,9 +1,18 @@
-@use '../../../styles/mixins' as *;
+.container {
+  min-height: 94vh;
+  background: linear-gradient(to bottom right, #faf5ff, #fce7f3);
+  padding: 1rem;
+}
+
+.wrapper {
+  max-width: 72rem;
+  margin: 0 auto;
+}
 
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  width: 100%;
   margin-bottom: 2rem;
 }
 
@@ -12,6 +21,7 @@
   align-items: center;
   color: #4b5563;
   transition: color 0.2s;
+  width: 30%;
 
   &:hover {
     color: #1f2937;
@@ -26,15 +36,12 @@
 
 .headerCenter {
   text-align: center;
+  width: 40%;
 
   h1 {
     font-size: 1.875rem;
     font-weight: 700;
     color: #1f2937;
-  }
-
-  .roundNumber {
-    color: #4b5563;
   }
 
   .languageMode {
@@ -44,19 +51,5 @@
     &.english {
       color: #2563eb;
     }
-
-    &.ukrainian {
-      color: #ca8a04;
-    }
-  }
-}
-
-.headerRight {
-  text-align: right;
-
-  p {
-    font-size: 0.875rem;
-    color: #4b5563;
-    margin-bottom: 0.5rem;
   }
 }

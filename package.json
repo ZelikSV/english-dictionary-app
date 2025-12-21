@@ -1,60 +1,62 @@
 {
-  "name": "app",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix",
-    "type-check": "tsc --noEmit",
-    "test": "echo \"No tests specified\" && exit 0",
-    "prepare": "husky"
-  },
-  "dependencies": {
-    "@heroicons/react": "^2.2.0",
-    "autoprefixer": "10.4.22",
-    "bcrypt": "^6.0.0",
-    "clsx": "^2.1.1",
-    "js-cookie": "^3.0.5",
-    "next": "16.0.10",
-    "next-auth": "^4.24.13",
-    "postcss": "8.5.6",
-    "postgres": "^3.4.7",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "react-hook-form": "^7.68.0",
-    "use-debounce": "^10.0.6",
-    "uuid": "^13.0.0",
-    "zod": "^4.1.13",
-    "zustand": "^5.0.9"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3.3.3",
-    "@types/bcrypt": "^6.0.0",
-    "@types/js-cookie": "^3.0.6",
-    "@types/node": "25.0.1",
-    "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3",
-    "@typescript-eslint/eslint-plugin": "^8.49.0",
-    "@typescript-eslint/parser": "^8.49.0",
-    "eslint": "^9.39.2",
-    "eslint-config-next": "16.0.10",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
-    "prettier": "^3.7.4",
-    "sass": "^1.96.0",
-    "typescript": "^5.9.3"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write"
-    ],
-    "*.{json,md,css}": [
-      "prettier --write"
-    ]
-  }
+    "name": "app",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev --turbopack",
+        "build": "next build --turbopack",
+        "start": "next start",
+        "lint": "eslint",
+        "lint:fix": "eslint --fix",
+        "type-check": "tsc --noEmit",
+        "test": "echo \"No tests specified\" && exit 0",
+        "prepare": "husky"
+    },
+    "dependencies": {
+        "@heroicons/react": "^2.2.0",
+        "autoprefixer": "10.4.22",
+        "bcrypt": "^6.0.0",
+        "clsx": "^2.1.1",
+        "js-cookie": "^3.0.5",
+        "lodash": "^4.17.21",
+        "next": "16.0.10",
+        "next-auth": "^4.24.13",
+        "postcss": "8.5.6",
+        "postgres": "^3.4.7",
+        "react": "19.2.3",
+        "react-dom": "19.2.3",
+        "react-hook-form": "^7.68.0",
+        "use-debounce": "^10.0.6",
+        "uuid": "^13.0.0",
+        "zod": "^4.1.13",
+        "zustand": "^5.0.9"
+    },
+    "devDependencies": {
+        "@eslint/eslintrc": "^3.3.3",
+        "@types/bcrypt": "^6.0.0",
+        "@types/lodash": "^4.17.21",
+        "@types/js-cookie": "^3.0.6",
+        "@types/node": "25.0.1",
+        "@types/react": "^19.2.7",
+        "@types/react-dom": "^19.2.3",
+        "@typescript-eslint/eslint-plugin": "^8.49.0",
+        "@typescript-eslint/parser": "^8.49.0",
+        "eslint": "^9.39.2",
+        "eslint-config-next": "16.0.10",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-hooks": "^7.0.1",
+        "husky": "^9.1.7",
+        "lint-staged": "^16.2.7",
+        "prettier": "^3.7.4",
+        "sass": "^1.96.0",
+        "typescript": "^5.9.3"
+    },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx}": [
+            "prettier --write"
+        ],
+        "*.{json,md,css}": [
+            "prettier --write"
+        ]
+    }
 }
