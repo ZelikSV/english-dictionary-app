@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { IWord } from '@/types';
 import { keyBy } from 'lodash';
+
+import { IWord } from '@/types';
 import { Lang } from '@/lib/constants';
 
 export interface ICard {
@@ -35,13 +36,15 @@ const prepareCard = (word: IWord | null) => {
     };
 };
 
-export const useCardGameStore = create<ICardGameStore>(() => ({
+const defaultCardGameState = {
     currentWordId: '',
     selectedWordIds: [],
     availableWordIds: [],
     wordsMap: {},
     card: null,
-}));
+};
+
+export const useCardGameStore = create<ICardGameStore>(() => defaultCardGameState);
 
 export const selectNewWord = () =>
     useCardGameStore.setState(state => {
@@ -98,3 +101,5 @@ export const editCard = () =>
 
 export const setWordsMaps = (wordsList: IWord[]) =>
     useCardGameStore.setState({ wordsMap: keyBy(wordsList, word => word.id) });
+
+export const resetCardGameStore = () => useCardGameStore.setState(defaultCardGameState);

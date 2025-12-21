@@ -11,6 +11,7 @@ import {
     useCardGameStore,
     setWordsMaps,
     setAvailableWordsIds,
+    resetCardGameStore,
 } from '@/store/cardGameStore';
 
 import { CardPreLoader, GameCard, GameCardActions } from './components';
@@ -45,6 +46,8 @@ const CardsGame = () => {
                 return;
             }
         }
+
+        return () => resetCardGameStore();
     }, [loading, wordsByGroups]);
 
     if (wordsByGroups.length === 0 || !card) {

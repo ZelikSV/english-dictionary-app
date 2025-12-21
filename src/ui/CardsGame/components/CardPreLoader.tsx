@@ -10,9 +10,9 @@ export const CardPreLoader = () => (
             <div className={styles.cardInner}>
                 <div className={`${styles.cardFace} ${styles.cardFront}`}>
                     <div className={styles.cardContent}>
-                        <div className={styles.languageLabel}>🇬🇧 English</div>
-                        <h3 className={styles.wordText}>Loading.....</h3>
-                        <p className={styles.flipHint}>Клікніть для перевороту</p>
+                        <div className={styles.languageLabel} />
+                        <h3 className={styles.wordText}>Loading...</h3>
+                        <p className={styles.flipHint} />
                     </div>
                 </div>
             </div>
@@ -23,12 +23,12 @@ export const CardPreLoader = () => (
                 <div className={styles.actions}>
                     <button className={`${styles.button} ${styles.nextRound}`}>
                         <ArrowLeftIcon />
-                        Попереднє слово
+                        <p className={styles.buttonContent} />
                     </button>
 
                     <button className={`${styles.button} ${styles.shuffle}`}>
                         <ArrowRightIcon />
-                        Наступне слово
+                        <p className={styles.buttonContent} />
                     </button>
                 </div>
             </div>

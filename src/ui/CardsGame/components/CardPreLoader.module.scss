@@ -53,6 +53,12 @@
   }
 }
 
+.buttonContent {
+  height: 20px;
+  width: 100px;
+  background: white;
+}
+
 .cardContainer {
   position: relative;
   perspective: 1000px;
@@ -98,19 +104,15 @@
   transition: box-shadow 0.2s;
 }
 
-.cardBack {
-  background: linear-gradient(to bottom right, #a855f7, #ec4899);
-  transform: rotateY(180deg);
-}
-
 .cardContent {
   text-align: center;
   padding: 1.5rem;
 }
 
 .languageLabel {
-  font-size: 0.75rem;
-  color: #6b7280;
+  height: 18px;
+  width: 158px;
+  background: #6b7280;
   margin-bottom: 0.75rem;
 }
 
@@ -126,42 +128,7 @@
 }
 
 .flipHint {
-  color: #6b7280;
-  font-size: 0.875rem;
-}
-
-.backContent {
-  text-align: center;
-  padding: 1.5rem;
-}
-
-.backLabel {
-  font-size: 0.75rem;
-  color: white;
-  opacity: 0.9;
-  margin-bottom: 0.75rem;
-}
-
-.backText {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 1rem;
-
-  @media (min-width: 1024px) {
-    font-size: 1.875rem;
-  }
-}
-
-.eyeIcon {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-
-  svg {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: white;
-    opacity: 0.75;
-  }
+  width: 176px;
+  height: 21px;
+  background: #6b7280;
 }
