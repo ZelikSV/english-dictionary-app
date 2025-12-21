@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { voicesNames } from '@/lib/constants';
+import { ICard } from '@/store/cardGameStore';
 
-import { ICard } from '../hooks/useCardsGame';
 import styles from './styles.module.scss';
 
 interface GameCardProps {

@@ -4,16 +4,37 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useGetWordsByGroupId } from '@/lib/hooks/useGetWordGroupById';
-import { editCard, selectNewWord, selectPrevWord } from '@/store/cardGameStore';
-import { Loading } from '@/ui/Loading';
+import {
+    editCard,
+    selectNewWord,
+    selectPrevWord,
+    useCardGameStore,
+    setWordsMaps,
+    setAvailableWordsIds,
+} from '@/store/cardGameStore';
 
-import { CARDS_PER_ROUND, useCardsGame } from './hooks/useCardsGame';
-import { GameCard, GameCardActions } from './components';
+import { CardPreLoader, GameCard, GameCardActions } from './components';
+
+const CARDS_PER_ROUND = 1;
 
 const CardsGame = () => {
     const router = useRouter();
     const { wordsByGroups, loading } = useGetWordsByGroupId();
-    const { currentCard } = useCardsGame(wordsByGroups);
+    const { card, availableWordIds, wordsMap, currentWordId } = useCardGameStore();
+
+    useEffect(() => {
+        setWordsMaps(wordsByGroups);
+    }, [wordsByGroups]);
+
+    useEffect(() => {
+        if (Object.keys(wordsMap).length && !availableWordIds.length) {
+            setAvailableWordsIds(Object.keys(wordsMap));
+        }
+
+        if (!currentWordId && availableWordIds.length) {
+            selectNewWord();
+        }
+    }, [wordsMap, availableWordIds]);
 
     useEffect(() => {
         if (!loading && wordsByGroups?.length) {
@@ -26,13 +47,13 @@ const CardsGame = () => {
         }
     }, [loading, wordsByGroups]);
 
-    if (wordsByGroups.length === 0 || !currentCard) {
-        return <Loading />;
+    if (wordsByGroups.length === 0 || !card) {
+        return <CardPreLoader />;
     }
 
     return (
         <>
-            <GameCard key={currentCard.id} card={currentCard} onFlip={editCard} />
+            <GameCard key={card.id} card={card} onFlip={editCard} />
             <GameCardActions onNextRound={selectNewWord} onPrevRound={selectPrevWord} />
         </>
     );

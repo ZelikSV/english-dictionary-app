@@ -1,8 +1,10 @@
+import { Suspense } from 'react';
 import clsx from 'clsx';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 import CardsGame from '@/ui/CardsGame';
+import { CardPreLoader } from '@/ui/CardsGame/components/CardPreLoader';
 
 import styles from './styles.module.scss';
 
@@ -24,7 +26,9 @@ const Cards = () => {
                     </div>
                 </div>
 
-                <CardsGame />
+                <Suspense fallback={<CardPreLoader />}>
+                    <CardsGame />
+                </Suspense>
             </div>
         </div>
     );
